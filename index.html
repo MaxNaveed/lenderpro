@@ -211,9 +211,116 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   .stats-row{grid-template-columns:1fr 1fr}
   .fgrid{grid-template-columns:1fr}
 }
+
+/* ── LOGIN SCREEN ─────────────────────────── */
+.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 50%,#7c3aed 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-screen.hidden{display:none}
+.login-box{background:#fff;border-radius:20px;padding:40px;width:380px;max-width:92vw;box-shadow:0 24px 64px rgba(0,0,0,0.25);animation:loginIn .3s ease}
+@keyframes loginIn{from{opacity:0;transform:translateY(-20px) scale(.97)}to{opacity:1;transform:none}}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:28px;justify-content:center}
+.login-logo-ico{width:44px;height:44px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:800;letter-spacing:-1px}
+.login-logo-name{font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.5px}
+.login-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:4px;text-align:center}
+.login-sub{font-size:13px;color:#94a3b8;text-align:center;margin-bottom:28px}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.login-label{font-size:11px;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase}
+.login-input{background:#f7f9fc;border:1.5px solid #e3e8f0;color:#0f172a;font-family:'Outfit',sans-serif;font-size:14px;padding:12px 14px;border-radius:10px;outline:none;transition:all .2s;width:100%}
+.login-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);background:#fff}
+.login-input::placeholder{color:#94a3b8}
+.login-btn{width:100%;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;padding:13px;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:4px}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.35)}
+.login-btn:active{transform:none}
+.login-err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:13px;padding:10px 14px;border-radius:8px;margin-top:12px;text-align:center;display:none}
+.login-err.show{display:block}
+.login-pwd-wrap{position:relative;display:flex;align-items:center}
+.login-pwd-wrap .login-input{padding-right:42px}
+.login-eye{position:absolute;right:12px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:16px;padding:4px;transition:color .15s}
+.login-eye:hover{color:#2563eb}
+.login-footer{text-align:center;margin-top:20px;font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace}
+
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
 </style>
 </head>
 <body>
+
+
+<!-- ═══ RESET PASSWORD MODAL ═══ -->
+<div class="login-screen hidden" id="reset-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-ico">🔑</div>
+      <div class="login-logo-name">Reset Password</div>
+    </div>
+
+    <!-- STEP 1: Enter reset code -->
+    <div id="reset-step1">
+      <div class="login-sub" style="margin-bottom:20px">A reset code will be sent to<br><strong>maxnaveed007@gmail.com</strong></div>
+      <button class="login-btn" onclick="sendResetCode()" style="margin-bottom:12px">📧 Send Reset Code to Email</button>
+      <div class="login-field" style="margin-top:16px">
+        <label class="login-label">Enter Reset Code</label>
+        <input class="login-input" id="reset-code-inp" type="text" placeholder="6-digit code"
+          onkeydown="if(event.key==='Enter')verifyResetCode()">
+      </div>
+      <button class="login-btn" onclick="verifyResetCode()">✓ Verify Code</button>
+      <div class="login-err" id="reset-err1">Invalid code. Please try again.</div>
+    </div>
+
+    <!-- STEP 2: Set new password -->
+    <div id="reset-step2" style="display:none">
+      <div class="login-sub" style="margin-bottom:20px">Code verified! Set your new password.</div>
+      <div class="login-field">
+        <label class="login-label">New Password</label>
+        <div class="login-pwd-wrap">
+          <input class="login-input" id="new-pwd1" type="password" placeholder="Enter new password">
+          <button class="login-eye" onclick="toggleEye('new-pwd1',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <div class="login-field">
+        <label class="login-label">Confirm New Password</label>
+        <div class="login-pwd-wrap">
+          <input class="login-input" id="new-pwd2" type="password" placeholder="Confirm new password"
+            onkeydown="if(event.key==='Enter')setNewPassword()">
+          <button class="login-eye" onclick="toggleEye('new-pwd2',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <button class="login-btn" onclick="setNewPassword()">🔒 Set New Password</button>
+      <div class="login-err" id="reset-err2">Passwords do not match.</div>
+    </div>
+
+    <div style="text-align:center;margin-top:14px">
+      <button onclick="hideReset()" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif">← Back to Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-ico">LP</div>
+      <div class="login-logo-name">LenderPro</div>
+    </div>
+    <div class="login-title">Welcome back</div>
+    <div class="login-sub">Enter your password to access the system</div>
+    <div class="login-field">
+      <label class="login-label">Password</label>
+      <div class="login-pwd-wrap">
+        <input class="login-input" id="login-pwd" type="password" placeholder="Enter password"
+          onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-eye" onclick="toggleLoginEye(this)" tabindex="-1">👁</button>
+      </div>
+    </div>
+    <button class="login-btn" onclick="doLogin()">🔓 Sign In</button>
+    <div class="login-err" id="login-err">Incorrect password. Please try again.</div>
+    <div style="text-align:center;margin-top:14px">
+      <button onclick="showReset()" style="background:none;border:none;color:#2563eb;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif;text-decoration:underline">Forgot password?</button>
+    </div>
+    <div class="login-footer">LenderPro v5.0 · Secured</div>
+  </div>
+</div>
+
 <div class="layout">
 
 <!-- ═══ SIDEBAR ═══ -->
@@ -368,6 +475,129 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
+
+// ════════════════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════════════════
+const RESET_EMAIL = "maxnaveed007@gmail.com";
+let APP_PASSWORD  = localStorage.getItem("lp_password") || "lender2024";
+let activeResetCode = "";
+
+function doLogin(){
+  const pwd = document.getElementById("login-pwd").value;
+  const err = document.getElementById("login-err");
+  // refresh password in case it was reset
+  APP_PASSWORD = localStorage.getItem("lp_password") || "lender2024";
+  if(pwd === APP_PASSWORD){
+    document.getElementById("login-screen").classList.add("hidden");
+    sessionStorage.setItem("lp_auth","1");
+    err.classList.remove("show");
+    loadFromCloud();
+  } else {
+    err.classList.add("show");
+    document.getElementById("login-pwd").value="";
+    document.getElementById("login-pwd").focus();
+    shakeBox();
+  }
+}
+
+function shakeBox(){
+  const box = document.querySelector("#login-screen .login-box");
+  if(!box) return;
+  box.style.animation="none";
+  box.offsetHeight;
+  box.style.animation="shake .4s ease";
+}
+
+function toggleLoginEye(btn){
+  const inp = document.getElementById("login-pwd");
+  if(inp.type==="password"){inp.type="text";btn.textContent="🙈"}
+  else{inp.type="password";btn.textContent="👁"}
+}
+
+function toggleEye(id, btn){
+  const inp = document.getElementById(id);
+  if(inp.type==="password"){inp.type="text";btn.textContent="🙈"}
+  else{inp.type="password";btn.textContent="👁"}
+}
+
+// ── RESET PASSWORD ───────────────────────────────────
+function showReset(){
+  document.getElementById("login-screen").classList.add("hidden");
+  document.getElementById("reset-screen").classList.remove("hidden");
+  document.getElementById("reset-step1").style.display="block";
+  document.getElementById("reset-step2").style.display="none";
+  document.getElementById("reset-code-inp").value="";
+  document.getElementById("reset-err1").classList.remove("show");
+}
+
+function hideReset(){
+  document.getElementById("reset-screen").classList.add("hidden");
+  document.getElementById("login-screen").classList.remove("hidden");
+}
+
+function sendResetCode(){
+  // Generate 6-digit code
+  activeResetCode = Math.floor(100000 + Math.random() * 900000).toString();
+  // Store it with 15 min expiry
+  localStorage.setItem("lp_reset_code", activeResetCode);
+  localStorage.setItem("lp_reset_expiry", Date.now() + 15*60*1000);
+  // Open Gmail compose with the code
+  const subject = encodeURIComponent("LenderPro Password Reset Code");
+  const body    = encodeURIComponent(
+    "Your LenderPro password reset code is:\n\n" +
+    "  " + activeResetCode + "\n\n" +
+    "This code expires in 15 minutes.\n\n" +
+    "If you did not request this, ignore this email."
+  );
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(RESET_EMAIL)}&su=${subject}&body=${body}`;
+  window.open(gmailUrl, "_blank");
+  toast("Reset code sent to " + RESET_EMAIL, "s");
+}
+
+function verifyResetCode(){
+  const entered  = document.getElementById("reset-code-inp").value.trim();
+  const stored   = localStorage.getItem("lp_reset_code");
+  const expiry   = parseInt(localStorage.getItem("lp_reset_expiry")||"0");
+  const err      = document.getElementById("reset-err1");
+  if(!stored || Date.now() > expiry){
+    err.textContent = "Code expired. Please request a new one.";
+    err.classList.add("show"); return;
+  }
+  if(entered !== stored){
+    err.textContent = "Invalid code. Please try again.";
+    err.classList.add("show"); return;
+  }
+  // Code correct — show step 2
+  err.classList.remove("show");
+  document.getElementById("reset-step1").style.display="none";
+  document.getElementById("reset-step2").style.display="block";
+}
+
+function setNewPassword(){
+  const p1  = document.getElementById("new-pwd1").value;
+  const p2  = document.getElementById("new-pwd2").value;
+  const err = document.getElementById("reset-err2");
+  if(!p1){ err.textContent="Password cannot be empty."; err.classList.add("show"); return; }
+  if(p1 !== p2){ err.textContent="Passwords do not match."; err.classList.add("show"); return; }
+  // Save new password
+  localStorage.setItem("lp_password", p1);
+  APP_PASSWORD = p1;
+  localStorage.removeItem("lp_reset_code");
+  localStorage.removeItem("lp_reset_expiry");
+  toast("✓ Password updated successfully!", "s");
+  hideReset();
+  document.getElementById("login-pwd").value="";
+}
+
+// Check if already logged in this session
+function checkAuth(){
+  if(sessionStorage.getItem("lp_auth")==="1"){
+    document.getElementById("login-screen").classList.add("hidden");
+    loadFromCloud();
+  }
+}
+
 // ════════════════════════════════════════════════════
 // JSONBIN CLOUD SYNC
 // ════════════════════════════════════════════════════
@@ -787,7 +1017,7 @@ function exportCSV(){
 // ════════════════════════════════════════════════════
 updateMeta();
 renderChips();
-loadFromCloud();
+checkAuth();
 </script>
 </body>
 </html>
