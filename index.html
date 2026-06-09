@@ -3,1021 +3,678 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LenderPro</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Lender Email Data · Max v0.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f0f3f9;
-  --surface: #ffffff;
-  --surface2: #f7f9fc;
-  --border: #e3e8f0;
-  --accent: #2563eb;
-  --accent-l: #eff4ff;
-  --accent2: #7c3aed;
-  --green: #059669;
-  --green-l: #ecfdf5;
-  --red: #dc2626;
-  --red-l: #fef2f2;
-  --orange: #d97706;
-  --text: #0f172a;
-  --text2: #475569;
-  --muted: #94a3b8;
-  --sh: 0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
-  --sh2: 0 8px 32px rgba(0,0,0,0.12);
-  --r: 12px;
-  --font: 'Outfit',sans-serif;
-  --mono: 'JetBrains Mono',monospace;
+:root{
+  --bg:#f7f3ee;
+  --bg2:#efe9e0;
+  --surface:#fffdf9;
+  --surface2:#f5f0e8;
+  --surface3:#ede6d8;
+  --border:#ddd5c4;
+  --border2:#c9bea8;
+  --gold:#b8860b;
+  --gold2:#d4a017;
+  --gold-l:rgba(184,134,11,.08);
+  --gold-ll:rgba(212,160,23,.12);
+  --emerald:#1a6b4a;
+  --emerald2:#22885e;
+  --emerald-l:rgba(26,107,74,.08);
+  --rose:#c0392b;
+  --rose-l:rgba(192,57,43,.08);
+  --slate:#2c3e50;
+  --slate2:#3d5166;
+  --amber:#e67e22;
+  --amber-l:rgba(230,126,34,.08);
+  --text:#1a1410;
+  --text2:#5a4e3a;
+  --muted:#9c8e7a;
+  --sh:0 1px 3px rgba(60,40,10,.06),0 4px 16px rgba(60,40,10,.05);
+  --sh2:0 8px 40px rgba(60,40,10,.12);
+  --sh3:0 24px 64px rgba(60,40,10,.18);
+  --r:10px;
+  --font:'DM Sans',sans-serif;
+  --serif:'Playfair Display',serif;
+  --mono:'DM Mono',monospace;
+  --grad:linear-gradient(135deg,#b8860b,#d4a017,#c8960e);
+  --grad2:linear-gradient(135deg,#1a6b4a,#22885e);
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:14px}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b8860b' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+.layout{display:flex;min-height:100vh;position:relative;z-index:1}
 
-/* LAYOUT */
-.layout{display:flex;min-height:100vh}
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:250px;background:var(--slate);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;box-shadow:4px 0 32px rgba(0,0,0,.15)}
+.sidebar::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(184,134,11,.08) 0%,transparent 40%);pointer-events:none}
+.sb-head{padding:24px 18px 20px;border-bottom:1px solid rgba(255,255,255,.08);position:relative}
+.sb-brand{display:flex;flex-direction:column;gap:4px}
+.sb-logo-row{display:flex;align-items:center;gap:10px}
+.sb-icon{width:34px;height:34px;background:var(--grad);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;box-shadow:0 4px 12px rgba(184,134,11,.4);font-family:var(--mono);letter-spacing:-.5px}
+.sb-title{font-family:var(--serif);font-size:14px;font-weight:700;color:#f5edd6;letter-spacing:-.2px;line-height:1.2}
+.sb-version{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-top:2px;padding-left:44px}
+.nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-group{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:2.5px;text-transform:uppercase;padding:14px 8px 5px}
+.nitem{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.5);font-size:12.5px;font-weight:500;transition:all .15s;margin-bottom:1px;user-select:none;position:relative}
+.nitem:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nitem.on{background:rgba(184,134,11,.15);color:#f0d080;border-left:2px solid var(--gold2)}
+.ni-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nbadge{background:rgba(184,134,11,.2);color:var(--gold2);border-radius:20px;font-size:10px;font-weight:700;padding:1px 7px;margin-left:auto;border:1px solid rgba(184,134,11,.3);font-family:var(--mono)}
+.sb-foot{padding:14px 16px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8;font-family:var(--mono)}
 
-/* SIDEBAR */
-.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;box-shadow:2px 0 12px rgba(0,0,0,0.04)}
-.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
-.logo-row{display:flex;align-items:center;gap:10px}
-.logo-ico{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;color:white;font-weight:800;letter-spacing:-1px;flex-shrink:0}
-.logo-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.4px}
-.logo-ver{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase}
-.nav{padding:10px 8px;flex:1;overflow-y:auto}
-.nav-sect{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;padding:10px 10px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;user-select:none}
-.nav-item:hover{background:var(--bg);color:var(--text)}
-.nav-item.active{background:var(--accent-l);color:var(--accent);font-weight:600}
-.nav-ico{font-size:15px;width:20px;text-align:center}
-.nav-badge{background:var(--accent-l);color:var(--accent);border-radius:20px;font-size:10px;font-weight:700;padding:1px 7px;margin-left:auto}
-.sb-foot{padding:14px 16px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.6}
+/* ═══ MAIN ═══ */
+.main{margin-left:250px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;box-shadow:0 1px 0 var(--border),0 4px 16px rgba(60,40,10,.04)}
+.page-title{font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:-.2px;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:9px}
+.cloud-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--emerald-l);color:var(--emerald);border:1px solid rgba(26,107,74,.15);transition:all .3s}
+.cloud-pill.saving{background:var(--amber-l);color:var(--amber);border-color:rgba(230,126,34,.2)}
+.cloud-pill.err{background:var(--rose-l);color:var(--rose);border-color:rgba(192,57,43,.2)}
+.cloud-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.saved-flash{font-family:var(--mono);font-size:10px;color:var(--emerald);opacity:0;transition:opacity .3s}
+.saved-flash.on{opacity:1}
+.content{padding:24px 28px 80px;flex:1}
+.panel{display:none}.panel.active{display:block}
 
-/* MAIN */
-.main{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.page-title{font-size:17px;font-weight:700;letter-spacing:-0.3px}
-.topbar-right{display:flex;align-items:center;gap:10px}
-.save-ind{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--green);opacity:0;transition:opacity .3s}
-.save-ind.on{opacity:1}
-.save-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.content{padding:22px 26px 60px;flex:1}
+/* ═══ BUTTONS ═══ */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-gold{background:var(--grad);color:#fff;box-shadow:0 2px 8px rgba(184,134,11,.25)}
+.btn-gold:hover{box-shadow:0 4px 16px rgba(184,134,11,.4);transform:translateY(-1px)}
+.btn-emerald{background:var(--grad2);color:#fff;box-shadow:0 2px 8px rgba(26,107,74,.2)}
+.btn-emerald:hover{box-shadow:0 4px 14px rgba(26,107,74,.35);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-outline:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
+.btn-ghost{background:transparent;color:var(--muted);padding:5px 9px}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-rose{background:var(--rose-l);color:var(--rose);border:1px solid rgba(192,57,43,.2)}.btn-rose:hover{background:rgba(192,57,43,.15)}
+.btn-sm{padding:5px 10px;font-size:11px;border-radius:7px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:6px}
+.btn-gmail{background:linear-gradient(135deg,#ea4335,#c5221f);color:#fff;display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);white-space:nowrap;transition:all .15s;box-shadow:0 2px 8px rgba(234,67,53,.2)}
+.btn-gmail:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(234,67,53,.35)}
 
-/* PANELS */
-.panel{display:none}
-.panel.active{display:block}
+/* ═══ HERO ═══ */
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px 30px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(184,134,11,.08) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-40px;left:20%;width:180px;height:180px;background:radial-gradient(circle,rgba(26,107,74,.05) 0%,transparent 70%);pointer-events:none}
+.hero-ornament{position:absolute;top:16px;right:20px;font-size:48px;opacity:.04;font-family:var(--serif);pointer-events:none;color:var(--gold)}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;position:relative}
+.hero-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.hero-title{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.4px;line-height:1.2}
+.hero-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.hstat{text-align:right}
+.hstat-v{font-size:28px;font-weight:800;color:var(--gold);letter-spacing:-1.5px;font-family:var(--mono)}
+.hstat-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:1px}
+.search-bar{display:flex;gap:10px;position:relative}
+.srch-inp{flex:1;background:var(--surface2);border:1.5px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:16px;font-weight:600;padding:13px 18px;border-radius:10px;outline:none;transition:all .2s;letter-spacing:3px}
+.srch-inp::placeholder{color:var(--muted);letter-spacing:1px;font-size:13px;font-family:var(--font);font-weight:400}
+.srch-inp:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(184,134,11,.1);background:var(--surface)}
+.srch-btn{background:var(--grad);color:#fff;border:none;font-family:var(--font);font-size:13px;font-weight:700;padding:13px 26px;border-radius:10px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;flex-shrink:0;box-shadow:0 4px 14px rgba(184,134,11,.25)}
+.srch-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(184,134,11,.4)}
+.chips-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.chip{background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:20px;cursor:pointer;transition:all .15s;letter-spacing:.8px;user-select:none}
+.chip:hover{border-color:var(--gold2);color:var(--gold);background:var(--gold-l)}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;white-space:nowrap}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.3)}
-.btn-secondary{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
-.btn-secondary:hover{background:var(--bg);color:var(--text)}
-.btn-ghost{background:transparent;color:var(--text2);padding:6px 10px}
-.btn-ghost:hover{background:var(--bg);color:var(--text)}
-.btn-success{background:var(--green);color:#fff}
-.btn-success:hover{background:#047857}
-.btn-danger{background:var(--red);color:#fff}
-.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px}
+/* ═══ DUPE WARNING ═══ */
+.dupe-warn{background:var(--amber-l);border:1px solid rgba(230,126,34,.25);border-radius:8px;padding:9px 14px;margin-bottom:12px;font-size:12px;color:var(--amber);display:flex;align-items:center;gap:8px;border-left:3px solid var(--amber)}
 
-/* GMAIL BUTTON */
-.btn-gmail{background:linear-gradient(135deg,#ea4335,#c5221f);color:#fff;display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .15s;font-family:var(--font);white-space:nowrap}
-.btn-gmail:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(234,67,53,.35)}
-.btn-gmail-sm{padding:6px 12px;font-size:12px;border-radius:7px}
+/* ═══ RESULT CARDS ═══ */
+#search-results{display:flex;flex-direction:column;gap:12px}
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:all .2s;animation:fadeUp .2s ease both}
+.rcard:hover{box-shadow:var(--sh2);border-color:var(--border2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.rcard-head{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);background:linear-gradient(to right,var(--surface2),var(--surface))}
+.rcard-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.code-badge{background:var(--slate);color:#f0d080;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 11px;border-radius:6px;letter-spacing:1px;border:1px solid rgba(255,255,255,.1)}
+.rcard-name{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--text)}
+.note-badge{background:var(--amber-l);color:var(--amber);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;border:1px solid rgba(230,126,34,.2)}
+.rcard-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.rcard-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
-/* SEARCH HERO */
-.search-hero{background:linear-gradient(135deg,#1e3a8a,#2563eb 55%,#7c3aed);border-radius:var(--r);padding:28px;margin-bottom:20px;position:relative;overflow:hidden}
-.search-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%, rgba(255,255,255,.06) 0%, transparent 50%),radial-gradient(circle at 80% 20%, rgba(255,255,255,.04) 0%, transparent 40%)}
-.sh-title{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:3px;position:relative}
-.sh-sub{color:rgba(255,255,255,.6);font-size:13px;margin-bottom:18px;position:relative}
-.search-row{display:flex;gap:10px;position:relative}
-.search-inp{flex:1;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.25);color:#fff;font-family:var(--mono);font-size:15px;font-weight:500;padding:13px 18px;border-radius:10px;outline:none;transition:all .2s;letter-spacing:2px}
-.search-inp::placeholder{color:rgba(255,255,255,.38);letter-spacing:1px;font-size:13px}
-.search-inp:focus{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.55)}
-.btn-go{background:#fff;color:var(--accent);border:none;font-family:var(--font);font-size:14px;font-weight:700;padding:13px 26px;border-radius:10px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px}
-.btn-go:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.18)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative}
-.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;transition:all .15s;letter-spacing:1px}
-.chip:hover{background:rgba(255,255,255,.22);color:#fff}
+/* ═══ EMAIL ROWS ═══ */
+.esec-label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
+.esec-line{flex:1;height:1px;background:var(--border);margin:0 8px}
+.esec-copy-all{background:var(--gold-l);color:var(--gold);border:1px solid rgba(184,134,11,.2);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;cursor:pointer;font-family:var(--font);transition:all .15s}
+.esec-copy-all:hover{background:var(--gold-ll)}
+.email-row{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:7px;margin-bottom:3px;border:1.5px solid transparent;background:var(--surface2);transition:all .15s}
+.email-row:hover{border-color:var(--border2);background:var(--surface)}
+.email-row.editing{border-color:var(--gold2);background:var(--surface);box-shadow:0 0 0 2px rgba(184,134,11,.1)}
+.email-display{font-family:var(--mono);font-size:12px;color:var(--emerald);flex:1;cursor:text;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.email-edit-inp{font-family:var(--mono);font-size:12px;color:var(--text);flex:1;border:none;outline:none;background:transparent;min-width:0;display:none}
+.row-btns{display:flex;gap:2px;flex-shrink:0}
+.rbtn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;padding:2px 5px;border-radius:4px;transition:all .15s;line-height:1}
+.rbtn:hover{background:var(--gold-l);color:var(--gold)}
+.rbtn.del:hover{background:var(--rose-l);color:var(--rose)}
+.add-row{display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:5px;border-radius:6px;border:1.5px dashed var(--border);transition:all .15s;width:100%;margin-top:3px;background:transparent;font-family:var(--font);font-weight:500}
+.add-row:hover{border-color:var(--gold2);color:var(--gold);background:var(--gold-l)}
 
-/* RESULT CARDS */
-#search-results{display:flex;flex-direction:column;gap:14px}
-.res-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);animation:up .2s ease both}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.res-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--surface2);border-bottom:1px solid var(--border)}
-.res-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.code-pill{background:var(--accent);color:#fff;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;letter-spacing:1px}
-.lender-name{font-size:15px;font-weight:600}
-.notes-tag{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase}
-.res-body{padding:14px 16px}
-.email-grp{margin-bottom:10px}
-.email-grp:last-child{margin-bottom:0}
-.grp-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
-.epill{display:inline-flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 11px;margin:2px 3px 2px 0;transition:border-color .15s}
-.epill:hover{border-color:var(--accent)}
-.etext{font-family:var(--mono);font-size:12px;color:var(--accent)}
-.cbtn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:0;transition:color .15s}
-.cbtn:hover{color:var(--accent)}
-.res-foot{padding:10px 16px;background:var(--surface2);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.res-foot-label{font-size:11px;color:var(--muted);font-weight:600;margin-right:4px}
+/* ═══ COMBINED BAR ═══ */
+.combined-bar{background:var(--slate);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:var(--sh2);animation:fadeUp .28s ease both}
+.cb-tag{background:var(--grad);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;font-family:var(--mono)}
+.cb-label{font-size:12px;color:rgba(255,255,255,.5)}
+.cb-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.cb-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:var(--font);transition:all .15s}
+.cb-btn:hover{background:rgba(255,255,255,.14);color:#fff}
 
-/* COMBINED STRIP */
-.combined-strip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--sh);animation:up .25s ease both}
-.cs-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
-.cs-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* ═══ STATS ═══ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.stat-v{font-size:28px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:3px;font-family:var(--mono);color:var(--gold)}
+.stat-l{font-size:11px;color:var(--muted);font-weight:500}
 
-/* EXCEL TABLE */
-.tbl-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+/* ═══ TABLE ═══ */
+.tbl-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.tbl-hint{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
 .tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:auto;box-shadow:var(--sh)}
-.etable{width:100%;border-collapse:collapse;font-size:13px;min-width:700px}
-.etable thead tr{background:linear-gradient(135deg,#1e3a8a,#2563eb)}
-.etable th{color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:11px 14px;text-align:left;border-right:1px solid rgba(255,255,255,.1);white-space:nowrap}
+.etable{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
+.etable thead tr{background:var(--slate)}
+.etable th{color:rgba(255,255,255,.5);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:11px 14px;text-align:left;border-right:1px solid rgba(255,255,255,.05);white-space:nowrap}
 .etable th:last-child{border-right:none}
 .etable tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
 .etable tbody tr:last-child{border-bottom:none}
-.etable tbody tr:hover{background:#fafbff}
+.etable tbody tr:hover{background:var(--gold-l)}
 .etable td{padding:9px 14px;border-right:1px solid var(--border);vertical-align:middle}
 .etable td:last-child{border-right:none}
-.cell-edit{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:11px;color:var(--text);width:100%;min-width:80px;padding:3px 5px;border-radius:4px}
-.cell-edit:focus{background:#fff;box-shadow:0 0 0 2px var(--accent);border-radius:4px}
-.code-tag{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-l);padding:3px 8px;border-radius:4px;display:inline-block}
+.cell-inp{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:11px;color:var(--text);width:100%;padding:3px 5px;border-radius:5px}
+.cell-inp:focus{background:var(--surface2);box-shadow:0 0 0 2px var(--gold2)}
+.code-cell-inp{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);width:100%;padding:3px 5px;border-radius:5px;min-width:55px}
+.code-cell-inp:focus{background:var(--surface2);box-shadow:0 0 0 2px var(--gold2)}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
-.stat-v{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:3px}
-.stat-l{font-size:12px;color:var(--muted);font-weight:500}
-
-/* FORM */
-.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
-.form-hd{padding:15px 20px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.form-ttl{font-size:15px;font-weight:700}
-.form-bd{padding:20px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg.full{grid-column:1/-1}
-.flabel{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.4px;text-transform:uppercase}
-.finput{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:9px 13px;border-radius:8px;outline:none;transition:all .2s;width:100%}
-.finput:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08);background:#fff}
-.finput::placeholder{color:var(--muted)}
+/* ═══ FORM ═══ */
+.form-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.form-top{padding:18px 22px;border-bottom:1px solid var(--border);background:linear-gradient(to right,var(--surface2),var(--surface));display:flex;align-items:center;gap:12px}
+.form-top-ico{width:34px;height:34px;background:var(--gold-l);border:1px solid rgba(184,134,11,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.form-top-title{font-family:var(--serif);font-size:15px;font-weight:700}
+.form-top-sub{font-size:11px;color:var(--muted)}
+.form-body{padding:22px}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-ft{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border)}
-.fmsg{font-size:12px;font-family:var(--mono);display:flex;align-items:center;gap:6px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
+.flabel{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.5px;text-transform:uppercase}
+.finput{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:9px 13px;border-radius:8px;outline:none;transition:all .2s;width:100%}
+.finput:focus{border-color:var(--gold2);box-shadow:0 0 0 2px rgba(184,134,11,.1);background:var(--surface)}
+.finput::placeholder{color:var(--muted);font-size:12px}
+.form-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border)}
+.fmsg{font-size:11px;font-family:var(--mono)}
 
-/* PASSWORD VAULT */
-.vault-section{margin-bottom:28px}
-.vault-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.vault-title{font-size:16px;font-weight:700;letter-spacing:-.3px}
-.pwd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.pwd-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh);transition:box-shadow .15s;position:relative}
-.pwd-card:hover{box-shadow:var(--sh2)}
-.pwd-card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
-.pwd-name{font-size:14px;font-weight:700;color:var(--text)}
-.pwd-category{font-size:10px;font-weight:600;background:var(--accent-l);color:var(--accent);padding:2px 8px;border-radius:10px;letter-spacing:.5px;text-transform:uppercase}
-.pwd-field{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 12px;margin-bottom:6px}
-.pwd-field:last-of-type{margin-bottom:0}
-.pwd-field-lbl{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;width:60px;flex-shrink:0}
-.pwd-field-val{font-family:var(--mono);font-size:12px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pwd-field-val.masked{letter-spacing:3px;color:var(--muted)}
-.pwd-actions{display:flex;gap:5px;flex-shrink:0;margin-left:6px}
-.icon-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;padding:3px 5px;border-radius:5px;transition:all .15s;line-height:1}
-.icon-btn:hover{background:var(--border);color:var(--text)}
-.pwd-link{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);text-decoration:none;padding:7px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:border-color .15s}
-.pwd-link:hover{border-color:var(--accent)}
-.pwd-card-actions{display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+/* ═══ ROUND ROBIN ═══ */
+.rr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.rr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.rr-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to right,var(--surface2),var(--surface))}
+.rr-role{font-family:var(--serif);font-size:14px;font-weight:700}
+.rr-role.owner{color:var(--gold)}
+.rr-role.pricing{color:var(--emerald)}
+.rr-role.funding{color:var(--slate2)}
+.rr-badge{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+.rr-badge.owner{background:var(--gold-l);color:var(--gold);border:1px solid rgba(184,134,11,.2)}
+.rr-badge.pricing{background:var(--emerald-l);color:var(--emerald);border:1px solid rgba(26,107,74,.2)}
+.rr-badge.funding{background:rgba(61,81,102,.1);color:var(--slate2);border:1px solid rgba(61,81,102,.2)}
+.rr-body{padding:14px 16px}
+.rr-agent{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;transition:all .15s;cursor:pointer}
+.rr-agent:hover{border-color:var(--border2)}
+.rr-agent.active-turn{border-color:var(--gold2);background:var(--gold-l);box-shadow:0 2px 8px rgba(184,134,11,.1)}
+.rr-agent.active-turn .rr-agent-name{color:var(--gold)}
+.rr-agent-name{font-size:13px;font-weight:600;color:var(--text)}
+.rr-agent-right{display:flex;align-items:center;gap:7px}
+.rr-cap{font-family:var(--mono);font-size:10px;color:var(--text2);background:var(--surface3);padding:2px 7px;border-radius:4px;border:1px solid var(--border)}
+.rr-dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.rr-agent.active-turn .rr-dot{background:var(--gold2);box-shadow:0 0 6px rgba(184,134,11,.5);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
+.rr-add{display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:7px;border-radius:6px;border:1.5px dashed var(--border);transition:all .15s;width:100%;margin-top:4px;background:transparent;font-family:var(--font)}
+.rr-add:hover{border-color:var(--gold2);color:var(--gold);background:var(--gold-l)}
+.rr-foot{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
+.rr-next{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.rr-next span{color:var(--gold);font-weight:600}
 
-/* VAULT FORM MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center}
+/* ═══ VAULT ═══ */
+.vault-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.vault-title{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:-.3px}
+.pwd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pwd-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh);transition:all .2s;position:relative;overflow:hidden}
+.pwd-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.pwd-card:hover{border-color:var(--border2);box-shadow:var(--sh2)}
+.pwd-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.pwd-name{font-family:var(--serif);font-size:14px;font-weight:700}
+.pwd-cat{font-size:10px;font-weight:600;background:var(--emerald-l);color:var(--emerald);padding:2px 8px;border-radius:20px;border:1px solid rgba(26,107,74,.2)}
+.pwd-row{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;margin-bottom:5px}
+.pwd-lbl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;width:50px;flex-shrink:0}
+.pwd-val{font-family:var(--mono);font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pwd-val.masked{letter-spacing:3px;color:var(--muted)}
+.pwd-acts{display:flex;gap:2px;flex-shrink:0}
+.ibt{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:2px 5px;border-radius:4px;transition:all .15s}
+.ibt:hover{background:var(--gold-l);color:var(--gold)}
+.pwd-url{display:block;font-family:var(--mono);font-size:10px;color:var(--emerald);text-decoration:none;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pwd-url:hover{border-color:var(--emerald2)}
+.pwd-foot{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* ═══ MODAL ═══ */
+.modal-bg{position:fixed;inset:0;background:rgba(26,20,10,.6);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
-.modal{background:var(--surface);border-radius:16px;padding:26px;width:480px;max-width:94vw;box-shadow:var(--sh2);animation:modalIn .2s ease}
-@keyframes modalIn{from{opacity:0;transform:translateY(-16px) scale(.97)}to{opacity:1;transform:none}}
-.modal-title{font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
-.modal-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);padding:2px 6px;border-radius:5px}
-.modal-close:hover{background:var(--bg);color:var(--text)}
-.modal-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px;width:480px;max-width:94vw;box-shadow:var(--sh3);animation:modalPop .2s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modalPop{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:none}}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-family:var(--serif);font-size:16px;font-weight:700}
+.modal-x{background:var(--surface2);border:none;font-size:14px;cursor:pointer;color:var(--muted);padding:4px 8px;border-radius:6px;transition:all .15s}
+.modal-x:hover{background:var(--rose-l);color:var(--rose)}
+.modal-body{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end}
 
-/* TOAST */
-.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
-.toast{background:var(--text);color:#fff;font-family:var(--font);font-size:13px;font-weight:500;padding:11px 16px;border-radius:10px;box-shadow:var(--sh2);display:flex;align-items:center;gap:9px;transform:translateX(130%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-width:320px;pointer-events:auto}
-.toast.on{transform:translateX(0)}
-.toast.s{background:var(--green)}
-.toast.e{background:var(--red)}
-
-/* EMPTY */
-.empty{text-align:center;padding:44px 24px;color:var(--muted)}
-.empty-ico{font-size:36px;margin-bottom:10px}
-.empty-ttl{font-size:15px;font-weight:600;color:var(--text2);margin-bottom:5px}
-
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%)}
-  .main{margin-left:0}
-  .stats-row{grid-template-columns:1fr 1fr}
-  .fgrid{grid-template-columns:1fr}
-}
-
-/* ── LOGIN SCREEN ─────────────────────────── */
-.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 50%,#7c3aed 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+/* ═══ LOGIN ═══ */
+.login-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 40%,rgba(184,134,11,.1) 0%,transparent 55%),radial-gradient(ellipse at 75% 65%,rgba(26,107,74,.07) 0%,transparent 50%)}
 .login-screen.hidden{display:none}
-.login-box{background:#fff;border-radius:20px;padding:40px;width:380px;max-width:92vw;box-shadow:0 24px 64px rgba(0,0,0,0.25);animation:loginIn .3s ease}
-@keyframes loginIn{from{opacity:0;transform:translateY(-20px) scale(.97)}to{opacity:1;transform:none}}
-.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:28px;justify-content:center}
-.login-logo-ico{width:44px;height:44px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:800;letter-spacing:-1px}
-.login-logo-name{font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.5px}
-.login-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:4px;text-align:center}
-.login-sub{font-size:13px;color:#94a3b8;text-align:center;margin-bottom:28px}
-.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.login-label{font-size:11px;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase}
-.login-input{background:#f7f9fc;border:1.5px solid #e3e8f0;color:#0f172a;font-family:'Outfit',sans-serif;font-size:14px;padding:12px 14px;border-radius:10px;outline:none;transition:all .2s;width:100%}
-.login-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08);background:#fff}
-.login-input::placeholder{color:#94a3b8}
-.login-btn{width:100%;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;padding:13px;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:4px}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.35)}
-.login-btn:active{transform:none}
-.login-err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:13px;padding:10px 14px;border-radius:8px;margin-top:12px;text-align:center;display:none}
-.login-err.show{display:block}
-.login-pwd-wrap{position:relative;display:flex;align-items:center}
-.login-pwd-wrap .login-input{padding-right:42px}
-.login-eye{position:absolute;right:12px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:16px;padding:4px;transition:color .15s}
-.login-eye:hover{color:#2563eb}
-.login-footer{text-align:center;margin-top:20px;font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 38px;width:400px;max-width:92vw;box-shadow:var(--sh3);animation:loginPop .35s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.login-card::after{content:'"';position:absolute;bottom:-10px;right:16px;font-family:var(--serif);font-size:120px;color:var(--gold);opacity:.04;pointer-events:none;line-height:1}
+@keyframes loginPop{from{opacity:0;transform:translateY(-20px) scale(.96)}to{opacity:1;transform:none}}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-ico{width:52px;height:52px;background:var(--slate);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 6px 20px rgba(0,0,0,.15);position:relative}
+.login-logo-ico::before{content:'';position:absolute;inset:0;background:var(--grad);border-radius:14px;opacity:.15}
+.login-logo-ico span{font-family:var(--mono);font-size:13px;font-weight:700;color:#f0d080;position:relative;z-index:1;letter-spacing:-.5px}
+.login-logo-name{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.login-logo-ver{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+.login-h{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);text-align:center;margin-bottom:4px}
+.login-s{font-size:12px;color:var(--muted);text-align:center;margin-bottom:26px}
+.lfield{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.llabel{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.5px;text-transform:uppercase}
+.lpwrap{position:relative;display:flex;align-items:center}
+.linput{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:11px 40px 11px 14px;border-radius:9px;outline:none;transition:all .2s;width:100%}
+.linput:focus{border-color:var(--gold2);box-shadow:0 0 0 2px rgba(184,134,11,.1);background:var(--surface)}
+.linput::placeholder{color:var(--muted)}
+.leye{position:absolute;right:12px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:3px;transition:color .15s}
+.leye:hover{color:var(--gold)}
+.lbtn{width:100%;background:var(--grad);color:#fff;border:none;font-family:var(--font);font-size:14px;font-weight:700;padding:13px;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:4px;box-shadow:0 4px 16px rgba(184,134,11,.25)}
+.lbtn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(184,134,11,.4)}
+.lerr{background:var(--rose-l);border:1px solid rgba(192,57,43,.25);color:var(--rose);font-size:12px;padding:9px 12px;border-radius:8px;margin-top:10px;text-align:center;display:none;font-weight:500}
+.lerr.show{display:block}
+.forgot-link{text-align:center;margin-top:14px;background:none;border:none;color:var(--gold);font-size:12px;cursor:pointer;font-family:var(--font);display:block;opacity:.7;transition:opacity .15s;width:100%}
+.forgot-link:hover{opacity:1}
+.login-footer{text-align:center;margin-top:20px;font-size:10px;color:var(--muted);font-family:var(--mono)}
 
+/* ═══ RESET ═══ */
+.reset-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.reset-screen.hidden{display:none}
 
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+/* ═══ TOAST ═══ */
+.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.toast{background:var(--surface);color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;padding:10px 14px 10px 10px;border-radius:10px;box-shadow:var(--sh2);display:flex;align-items:center;gap:8px;transform:translateX(130%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-width:320px;pointer-events:auto;border:1px solid var(--border)}
+.toast.on{transform:translateX(0)}
+.toast.s{border-left:3px solid var(--emerald)}
+.toast.e{border-left:3px solid var(--rose)}
+.ticon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.toast.s .ticon{background:var(--emerald-l);color:var(--emerald)}
+.toast.e .ticon{background:var(--rose-l);color:var(--rose)}
+.toast:not(.s):not(.e) .ticon{background:var(--gold-l);color:var(--gold)}
 
+.empty{text-align:center;padding:44px;color:var(--muted)}
+.empty-ico{font-size:36px;margin-bottom:10px;opacity:.4}
+.empty-t{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--text2);margin-bottom:4px}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.stats-grid{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr}.rcard-body{grid-template-columns:1fr}.rr-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-
-<!-- ═══ RESET PASSWORD MODAL ═══ -->
-<div class="login-screen hidden" id="reset-screen">
-  <div class="login-box">
+<!-- RESET -->
+<div class="reset-screen hidden" id="reset-screen">
+  <div class="login-card">
     <div class="login-logo">
-      <div class="login-logo-ico">🔑</div>
+      <div class="login-logo-ico"><span>🔑</span></div>
       <div class="login-logo-name">Reset Password</div>
     </div>
-
-    <!-- STEP 1: Enter reset code -->
-    <div id="reset-step1">
-      <div class="login-sub" style="margin-bottom:20px">A reset code will be sent to<br><strong>maxnaveed007@gmail.com</strong></div>
-      <button class="login-btn" onclick="sendResetCode()" style="margin-bottom:12px">📧 Send Reset Code to Email</button>
-      <div class="login-field" style="margin-top:16px">
-        <label class="login-label">Enter Reset Code</label>
-        <input class="login-input" id="reset-code-inp" type="text" placeholder="6-digit code"
-          onkeydown="if(event.key==='Enter')verifyResetCode()">
-      </div>
-      <button class="login-btn" onclick="verifyResetCode()">✓ Verify Code</button>
-      <div class="login-err" id="reset-err1">Invalid code. Please try again.</div>
+    <div id="rst-s1">
+      <div class="login-s">Send a reset code to<br><strong style="color:var(--gold)">maxnaveed007@gmail.com</strong></div>
+      <button class="lbtn" style="margin-bottom:14px" onclick="sendCode()">📧 Send Reset Code</button>
+      <div class="lfield"><label class="llabel">Enter Code</label><input class="linput" id="rst-code" placeholder="6-digit code" onkeydown="if(event.key==='Enter')verifyCode()"></div>
+      <button class="lbtn" onclick="verifyCode()">✓ Verify Code</button>
+      <div class="lerr" id="rst-err1">Invalid or expired code.</div>
     </div>
-
-    <!-- STEP 2: Set new password -->
-    <div id="reset-step2" style="display:none">
-      <div class="login-sub" style="margin-bottom:20px">Code verified! Set your new password.</div>
-      <div class="login-field">
-        <label class="login-label">New Password</label>
-        <div class="login-pwd-wrap">
-          <input class="login-input" id="new-pwd1" type="password" placeholder="Enter new password">
-          <button class="login-eye" onclick="toggleEye('new-pwd1',this)" tabindex="-1">👁</button>
-        </div>
-      </div>
-      <div class="login-field">
-        <label class="login-label">Confirm New Password</label>
-        <div class="login-pwd-wrap">
-          <input class="login-input" id="new-pwd2" type="password" placeholder="Confirm new password"
-            onkeydown="if(event.key==='Enter')setNewPassword()">
-          <button class="login-eye" onclick="toggleEye('new-pwd2',this)" tabindex="-1">👁</button>
-        </div>
-      </div>
-      <button class="login-btn" onclick="setNewPassword()">🔒 Set New Password</button>
-      <div class="login-err" id="reset-err2">Passwords do not match.</div>
+    <div id="rst-s2" style="display:none">
+      <div class="login-s">Code verified! Set your new password.</div>
+      <div class="lfield"><label class="llabel">New Password</label><div class="lpwrap"><input class="linput" id="np1" type="password" placeholder="New password"><button class="leye" onclick="toggleEye('np1',this)">👁</button></div></div>
+      <div class="lfield"><label class="llabel">Confirm</label><div class="lpwrap"><input class="linput" id="np2" type="password" placeholder="Confirm" onkeydown="if(event.key==='Enter')setNewPwd()"><button class="leye" onclick="toggleEye('np2',this)">👁</button></div></div>
+      <button class="lbtn" onclick="setNewPwd()">🔒 Set Password</button>
+      <div class="lerr" id="rst-err2">Passwords do not match.</div>
     </div>
-
-    <div style="text-align:center;margin-top:14px">
-      <button onclick="hideReset()" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif">← Back to Login</button>
-    </div>
+    <button class="forgot-link" onclick="hideReset()">← Back to Login</button>
   </div>
 </div>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
+<!-- LOGIN -->
 <div class="login-screen" id="login-screen">
-  <div class="login-box">
+  <div class="login-card">
     <div class="login-logo">
-      <div class="login-logo-ico">LP</div>
-      <div class="login-logo-name">LenderPro</div>
+      <div class="login-logo-ico"><span>LED</span></div>
+      <div class="login-logo-name">Lender Email Data</div>
+      <div class="login-logo-ver">Max · Version 0.1</div>
     </div>
-    <div class="login-title">Welcome back</div>
-    <div class="login-sub">Enter your password to access the system</div>
-    <div class="login-field">
-      <label class="login-label">Password</label>
-      <div class="login-pwd-wrap">
-        <input class="login-input" id="login-pwd" type="password" placeholder="Enter password"
-          onkeydown="if(event.key==='Enter')doLogin()">
-        <button class="login-eye" onclick="toggleLoginEye(this)" tabindex="-1">👁</button>
-      </div>
+    <div class="login-h">Welcome back</div>
+    <div class="login-s">Sign in to access your system</div>
+    <div class="lfield"><label class="llabel">Password</label>
+      <div class="lpwrap"><input class="linput" id="lpwd" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"><button class="leye" onclick="toggleLoginEye(this)">👁</button></div>
     </div>
-    <button class="login-btn" onclick="doLogin()">🔓 Sign In</button>
-    <div class="login-err" id="login-err">Incorrect password. Please try again.</div>
-    <div style="text-align:center;margin-top:14px">
-      <button onclick="showReset()" style="background:none;border:none;color:#2563eb;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif;text-decoration:underline">Forgot password?</button>
-    </div>
-    <div class="login-footer">LenderPro v5.0 · Secured</div>
+    <button class="lbtn" onclick="doLogin()">Sign In →</button>
+    <div class="lerr" id="lerr">Incorrect password. Please try again.</div>
+    <button class="forgot-link" onclick="showReset()">Forgot password?</button>
+    <div class="login-footer">Lender Email Data · Max v0.1 · Cloud Synced</div>
   </div>
 </div>
 
+<!-- APP -->
 <div class="layout">
-
-<!-- ═══ SIDEBAR ═══ -->
-<aside class="sidebar">
-  <div class="sb-logo">
-    <div class="logo-row">
-      <div class="logo-ico">LP</div>
-      <div>
-        <div class="logo-name">LenderPro</div>
-        <div class="logo-ver">v4.0</div>
-      </div>
-    </div>
-  </div>
-  <nav class="nav">
-    <div class="nav-sect">Main</div>
-    <div class="nav-item active" onclick="nav('search',this)"><span class="nav-ico">🔍</span>Search</div>
-    <div class="nav-item" onclick="nav('directory',this)"><span class="nav-ico">📊</span>Directory<span class="nav-badge" id="nav-cnt">0</span></div>
-    <div class="nav-sect">Manage</div>
-    <div class="nav-item" onclick="nav('add',this)"><span class="nav-ico">➕</span>Add Lender</div>
-    <div class="nav-item" onclick="nav('vault',this)"><span class="nav-ico">🔐</span>Password Vault<span class="nav-badge" id="nav-pwd">0</span></div>
-    <div class="nav-sect">Export</div>
-    <div class="nav-item" onclick="exportCSV()"><span class="nav-ico">📥</span>Export CSV</div>
-  </nav>
-  <div class="sb-foot">
-    <span id="sb-cnt">0</span> lenders · <span id="sb-pwd">0</span> passwords<br>auto-saved locally
-  </div>
-</aside>
-
-<!-- ═══ MAIN ═══ -->
-<div class="main">
-  <div class="topbar">
-    <div class="page-title" id="page-title">Search Lenders</div>
-    <div class="topbar-right">
-      <div class="save-ind" id="save-ind"><div class="save-dot"></div>Saved</div>
-        <div id="cloud-status"></div>
-        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
-    </div>
-  </div>
-
-  <div class="content">
-
-    <!-- ══ SEARCH ══ -->
-    <div class="panel active" id="panel-search">
-      <div class="search-hero">
-        <div class="sh-title">✉ Lender Email Lookup</div>
-        <div class="sh-sub">Enter lender codes · each gets its own Gmail compose window</div>
-        <div class="search-row">
-          <input class="search-inp" id="srch" placeholder="FF  VOX  LF  1R ..."
-            onkeydown="if(event.key==='Enter')doSearch()" autocomplete="off" spellcheck="false">
-          <button class="btn-go" onclick="doSearch()">⚡ Search</button>
+  <aside class="sidebar">
+    <div class="sb-head">
+      <div class="sb-brand">
+        <div class="sb-logo-row">
+          <div class="sb-icon">LED</div>
+          <div class="sb-title">Lender Email Data</div>
         </div>
-        <div class="chips" id="chips"></div>
+        <div class="sb-version">Max · Version 0.1</div>
       </div>
-      <div id="search-results"></div>
     </div>
+    <nav class="nav">
+      <div class="nav-group">Main</div>
+      <div class="nitem on" onclick="goNav('search',this)"><span class="ni-ico">🔍</span>Search</div>
+      <div class="nitem" onclick="goNav('directory',this)"><span class="ni-ico">📋</span>Directory<span class="nbadge" id="nav-cnt">0</span></div>
+      <div class="nav-group">Tools</div>
+      <div class="nitem" onclick="goNav('roundrobin',this)"><span class="ni-ico">🔄</span>Round Robin</div>
+      <div class="nitem" onclick="goNav('vault',this)"><span class="ni-ico">🔐</span>Vault<span class="nbadge" id="nav-pwd">0</span></div>
+      <div class="nav-group">Manage</div>
+      <div class="nitem" onclick="goNav('add',this)"><span class="ni-ico">➕</span>Add Lender</div>
+      <div class="nitem" onclick="exportCSV()"><span class="ni-ico">📥</span>Export CSV</div>
+      <div class="nitem" onclick="doLogout()"><span class="ni-ico">🚪</span>Logout</div>
+    </nav>
+    <div class="sb-foot"><span style="color:rgba(240,208,128,.6)" id="sb-cnt">0</span> lenders · <span style="color:rgba(240,208,128,.6)" id="sb-pwd">0</span> passwords<br>auto-saved · cloud synced</div>
+  </aside>
 
-    <!-- ══ DIRECTORY ══ -->
-    <div class="panel" id="panel-directory">
-      <div class="stats-row" id="stats-row"></div>
-      <div class="tbl-toolbar">
-        <div style="font-size:13px;color:var(--text2)">Click any cell to edit · saves instantly</div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-secondary btn-sm" onclick="nav('add',null)">+ Add Lender</button>
-          <button class="btn btn-success btn-sm" onclick="exportCSV()">📥 Export CSV</button>
-        </div>
-      </div>
-      <div class="tbl-wrap">
-        <table class="etable">
-          <thead><tr>
-            <th style="width:44px">#</th>
-            <th style="width:80px">Code</th>
-            <th style="width:170px">Name</th>
-            <th>TO Emails</th>
-            <th>CC Emails</th>
-            <th style="width:110px">Notes</th>
-            <th style="width:80px">Actions</th>
-          </tr></thead>
-          <tbody id="tbl-body"></tbody>
-        </table>
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">Search Lenders</div>
+      <div class="topbar-right">
+        <div class="saved-flash" id="saved-flash">✓ saved</div>
+        <div class="cloud-pill" id="cloud-pill"><div class="cloud-dot"></div><span id="cloud-txt">Synced</span></div>
+        <button class="btn btn-outline btn-sm" onclick="exportCSV()">⬇ CSV</button>
       </div>
     </div>
 
-    <!-- ══ ADD LENDER ══ -->
-    <div class="panel" id="panel-add">
-      <div class="form-card">
-        <div class="form-hd">
-          <div class="form-ttl" id="form-ttl">➕ Add New Lender</div>
-        </div>
-        <div class="form-bd">
-          <div class="fgrid">
-            <div class="fg"><label class="flabel">Code *</label><input class="finput" id="f-code" placeholder="LF, FF, VOX…"></div>
-            <div class="fg"><label class="flabel">Name *</label><input class="finput" id="f-name" placeholder="Lender full name"></div>
-            <div class="fg full"><label class="flabel">TO Emails (comma-separated)</label><input class="finput" id="f-to" placeholder="submissions@lender.com, ops@lender.com"></div>
-            <div class="fg full"><label class="flabel">CC Emails (comma-separated)</label><input class="finput" id="f-cc" placeholder="manager@lender.com"></div>
-            <div class="fg full"><label class="flabel">Notes</label><input class="finput" id="f-notes" placeholder="e.g. docs required, renewal only"></div>
+    <div class="content">
+
+      <!-- SEARCH -->
+      <div class="panel active" id="panel-search">
+        <div class="hero">
+          <div class="hero-ornament">✉</div>
+          <div class="hero-top">
+            <div>
+              <div class="hero-label">Lender Lookup</div>
+              <div class="hero-title">Email Directory</div>
+              <div class="hero-sub">Enter lender codes · each opens its own Gmail compose window</div>
+            </div>
+            <div class="hstat"><div class="hstat-v" id="h-lenders">0</div><div class="hstat-l">Lenders</div></div>
           </div>
-          <div class="form-ft">
-            <div class="fmsg" id="fmsg"></div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
-              <button class="btn btn-primary" onclick="saveLender()">Save Lender</button>
+          <div class="search-bar">
+            <input class="srch-inp" id="srch" placeholder="FF  VOX  LF  LF  1R …" onkeydown="if(event.key==='Enter')doSearch()" autocomplete="off" spellcheck="false">
+            <button class="srch-btn" onclick="doSearch()">Search ⚡</button>
+          </div>
+          <div class="chips-row" id="chips"></div>
+        </div>
+        <div id="search-results"></div>
+      </div>
+
+      <!-- DIRECTORY -->
+      <div class="panel" id="panel-directory">
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="tbl-toolbar">
+          <div class="tbl-hint">✦ Click any cell to edit directly · code column is editable too</div>
+          <div style="display:flex;gap:7px">
+            <button class="btn btn-outline btn-sm" onclick="goNav('add',null)">+ Add</button>
+            <button class="btn btn-emerald btn-sm" onclick="exportCSV()">📥 CSV</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="etable">
+            <thead><tr><th style="width:36px">#</th><th style="width:90px">Code</th><th style="width:170px">Name</th><th>TO Emails</th><th>CC Emails</th><th style="width:110px">Notes</th><th style="width:75px">Act</th></tr></thead>
+            <tbody id="tbl-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ROUND ROBIN -->
+      <div class="panel" id="panel-roundrobin">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div>
+            <div style="font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:3px">Round Robin</div>
+            <div style="font-size:12px;color:var(--muted)">Manage turn order per role · set agent caps</div>
+          </div>
+          <button class="btn btn-gold btn-sm" onclick="saveRR()">💾 Save All</button>
+        </div>
+        <div class="rr-grid" id="rr-grid"></div>
+      </div>
+
+      <!-- VAULT -->
+      <div class="panel" id="panel-vault">
+        <div class="vault-hd">
+          <div class="vault-title">Password Vault</div>
+          <button class="btn btn-gold" onclick="openPwdModal()">+ Add Entry</button>
+        </div>
+        <div class="pwd-grid" id="pwd-grid"><div class="empty"><div class="empty-ico">🔒</div><div class="empty-t">No entries yet</div></div></div>
+      </div>
+
+      <!-- ADD -->
+      <div class="panel" id="panel-add">
+        <div class="form-wrap">
+          <div class="form-top">
+            <div class="form-top-ico">✏️</div>
+            <div><div class="form-top-title" id="form-ttl">Add New Lender</div><div class="form-top-sub">Saves to cloud automatically</div></div>
+          </div>
+          <div class="form-body">
+            <div class="fgrid">
+              <div class="fg"><label class="flabel">Code *</label><input class="finput" id="f-code" placeholder="e.g. LF, FF, VOX"></div>
+              <div class="fg"><label class="flabel">Lender Name *</label><input class="finput" id="f-name" placeholder="Full lender name"></div>
+              <div class="fg full"><label class="flabel">TO Emails (comma-separated)</label><input class="finput" id="f-to" placeholder="submissions@lender.com, ops@lender.com"></div>
+              <div class="fg full"><label class="flabel">CC Emails (comma-separated)</label><input class="finput" id="f-cc" placeholder="manager@lender.com"></div>
+              <div class="fg full"><label class="flabel">Notes</label><input class="finput" id="f-notes" placeholder="e.g. docs required, renewal only"></div>
+            </div>
+            <div class="form-footer">
+              <div class="fmsg" id="fmsg"></div>
+              <div style="display:flex;gap:7px"><button class="btn btn-outline" onclick="clearForm()">Clear</button><button class="btn btn-gold" onclick="saveLender()">Save Lender</button></div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- ══ PASSWORD VAULT ══ -->
-    <div class="panel" id="panel-vault">
-      <div class="vault-section">
-        <div class="vault-header">
-          <div class="vault-title">🔐 Password Vault</div>
-          <button class="btn btn-primary" onclick="openPwdModal()">+ Add Entry</button>
-        </div>
-        <div class="pwd-grid" id="pwd-grid">
-          <div class="empty"><div class="empty-ico">🔒</div><div class="empty-ttl">No entries yet</div><div>Click "+ Add Entry" to save a password</div></div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
-</div><!-- /main -->
-</div><!-- /layout -->
-
-<!-- PASSWORD MODAL -->
-<div class="modal-bg" id="pwd-modal">
-  <div class="modal">
-    <div class="modal-title">
-      <span id="modal-ttl">🔐 Add Password Entry</span>
-      <button class="modal-close" onclick="closePwdModal()">✕</button>
-    </div>
-    <div class="modal-grid">
-      <div class="fg"><label class="flabel">Name / Site *</label><input class="finput" id="pm-name" placeholder="e.g. Headway, Rapidfinance Portal"></div>
-      <div class="fg"><label class="flabel">Username / Email</label><input class="finput" id="pm-user" placeholder="user@email.com or username"></div>
-      <div class="fg"><label class="flabel">Password</label>
-        <div style="position:relative;display:flex;align-items:center">
-          <input class="finput" id="pm-pwd" type="password" placeholder="••••••••••" style="padding-right:40px">
-          <button onclick="togglePwdVis('pm-pwd',this)" class="icon-btn" style="position:absolute;right:8px;font-size:15px">👁</button>
-        </div>
-      </div>
-      <div class="fg"><label class="flabel">Login URL</label><input class="finput" id="pm-url" placeholder="https://portal.lender.com/login"></div>
-      <div class="fg"><label class="flabel">Category / Notes</label><input class="finput" id="pm-cat" placeholder="e.g. Lender Portal, CRM, Bank"></div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closePwdModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="savePwd()">Save Entry</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
+<!-- MODALS -->
+<div class="modal-bg" id="pwd-modal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title" id="modal-ttl">Add Password Entry</div><button class="modal-x" onclick="closePwdModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label class="flabel">Name / Site *</label><input class="finput" id="pm-name" placeholder="e.g. Headway, Rapidfinance Portal"></div>
+      <div class="fg"><label class="flabel">Username / Email</label><input class="finput" id="pm-user" placeholder="user@email.com"></div>
+      <div class="fg"><label class="flabel">Password</label>
+        <div style="position:relative;display:flex;align-items:center"><input class="finput" id="pm-pwd" type="password" placeholder="••••••••••" style="padding-right:40px"><button onclick="togglePwdVis('pm-pwd',this)" class="ibt" style="position:absolute;right:8px;font-size:14px">👁</button></div>
+      </div>
+      <div class="fg"><label class="flabel">Login URL</label><input class="finput" id="pm-url" placeholder="https://portal.lender.com"></div>
+      <div class="fg"><label class="flabel">Category</label><input class="finput" id="pm-cat" placeholder="e.g. Lender Portal, CRM, Bank"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closePwdModal()">Cancel</button><button class="btn btn-gold" onclick="savePwd()">Save Entry</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="rr-modal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title" id="rr-modal-ttl">Add Agent</div><button class="modal-x" onclick="document.getElementById('rr-modal').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label class="flabel">Agent Name *</label><input class="finput" id="rr-agent-name" placeholder="e.g. John Smith"></div>
+      <div class="fg"><label class="flabel">Cap Amount ($)</label><input class="finput" id="rr-agent-cap" placeholder="e.g. 30000" type="number"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="document.getElementById('rr-modal').classList.remove('open')">Cancel</button><button class="btn btn-gold" onclick="saveRRAgent()">Add Agent</button></div>
+  </div>
+</div>
+
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
+const RESET_EMAIL="maxnaveed007@gmail.com";
+let APP_PASSWORD=localStorage.getItem("lp_password")||"lender2024";
+let _rc="";
 
-// ════════════════════════════════════════════════════
-// LOGIN
-// ════════════════════════════════════════════════════
-const RESET_EMAIL = "maxnaveed007@gmail.com";
-let APP_PASSWORD  = localStorage.getItem("lp_password") || "lender2024";
-let activeResetCode = "";
+function doLogin(){APP_PASSWORD=localStorage.getItem("lp_password")||"lender2024";const pwd=document.getElementById("lpwd").value;const err=document.getElementById("lerr");if(pwd===APP_PASSWORD){document.getElementById("login-screen").classList.add("hidden");sessionStorage.setItem("lp_auth","1");err.classList.remove("show");loadCloud();}else{err.classList.add("show");document.getElementById("lpwd").value="";document.getElementById("lpwd").focus();const b=document.querySelector(".login-screen .login-card");b.style.animation="none";b.offsetHeight;b.style.animation="shake .4s ease"}}
+function doLogout(){sessionStorage.removeItem("lp_auth");location.reload()}
+function toggleLoginEye(btn){const i=document.getElementById("lpwd");i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈"}
+function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈"}
+function showReset(){document.getElementById("login-screen").classList.add("hidden");document.getElementById("reset-screen").classList.remove("hidden");document.getElementById("rst-s1").style.display="block";document.getElementById("rst-s2").style.display="none";document.getElementById("rst-code").value="";document.getElementById("rst-err1").classList.remove("show")}
+function hideReset(){document.getElementById("reset-screen").classList.add("hidden");document.getElementById("login-screen").classList.remove("hidden")}
+function sendCode(){_rc=Math.floor(100000+Math.random()*900000).toString();localStorage.setItem("lp_rcode",_rc);localStorage.setItem("lp_rexp",Date.now()+15*60*1000);const su=encodeURIComponent("LED Reset Code");const bo=encodeURIComponent("Your reset code:\n\n"+_rc+"\n\nExpires in 15 minutes.");window.open("https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(RESET_EMAIL)+"&su="+su+"&body="+bo,"_blank");toast("Code sent to "+RESET_EMAIL,"s")}
+function verifyCode(){const v=document.getElementById("rst-code").value.trim();const s=localStorage.getItem("lp_rcode");const x=parseInt(localStorage.getItem("lp_rexp")||"0");const e=document.getElementById("rst-err1");if(!s||Date.now()>x){e.textContent="Code expired.";e.classList.add("show");return}if(v!==s){e.textContent="Invalid code.";e.classList.add("show");return}e.classList.remove("show");document.getElementById("rst-s1").style.display="none";document.getElementById("rst-s2").style.display="block"}
+function setNewPwd(){const p1=document.getElementById("np1").value,p2=document.getElementById("np2").value;const e=document.getElementById("rst-err2");if(!p1){e.textContent="Cannot be empty.";e.classList.add("show");return}if(p1!==p2){e.textContent="Do not match.";e.classList.add("show");return}localStorage.setItem("lp_password",p1);APP_PASSWORD=p1;localStorage.removeItem("lp_rcode");localStorage.removeItem("lp_rexp");toast("✓ Password updated!","s");hideReset();document.getElementById("lpwd").value=""}
+function checkAuth(){if(sessionStorage.getItem("lp_auth")==="1"){document.getElementById("login-screen").classList.add("hidden");loadCloud()}}
 
-function doLogin(){
-  const pwd = document.getElementById("login-pwd").value;
-  const err = document.getElementById("login-err");
-  // refresh password in case it was reset
-  APP_PASSWORD = localStorage.getItem("lp_password") || "lender2024";
-  if(pwd === APP_PASSWORD){
-    document.getElementById("login-screen").classList.add("hidden");
-    sessionStorage.setItem("lp_auth","1");
-    err.classList.remove("show");
-    loadFromCloud();
-  } else {
-    err.classList.add("show");
-    document.getElementById("login-pwd").value="";
-    document.getElementById("login-pwd").focus();
-    shakeBox();
-  }
-}
+const BIN_ID="6a272d8ef5f4af5e29cdbcd5",API_KEY="$2a$10$4QT4KzwLao5T1VAUExkcuuqZV5C/axkZovd3oZUgz2mlKAbqSQ/iG",BIN_URL="https://api.jsonbin.io/v3/b/"+BIN_ID;
+let db=JSON.parse(localStorage.getItem("lp_db_v4"))||{};
+let pwds=JSON.parse(localStorage.getItem("lp_pwds_v4"))||[];
+let rrData=JSON.parse(localStorage.getItem("lp_rr_v4"))||{owner:{agents:[],turn:0},pricing:{agents:[],turn:0},funding:{agents:[],turn:0}};
+let _st=null;
 
-function shakeBox(){
-  const box = document.querySelector("#login-screen .login-box");
-  if(!box) return;
-  box.style.animation="none";
-  box.offsetHeight;
-  box.style.animation="shake .4s ease";
-}
+async function loadCloud(){setCloud("saving","Loading…");try{const r=await fetch(BIN_URL+"/latest",{headers:{"X-Master-Key":API_KEY}});const j=await r.json();const d=j.record;if(d&&d.lenders&&Object.keys(d.lenders).length){db=d.lenders;pwds=d.passwords||[];if(d.rr)rrData=d.rr;localStorage.setItem("lp_db_v4",JSON.stringify(db));localStorage.setItem("lp_pwds_v4",JSON.stringify(pwds));localStorage.setItem("lp_rr_v4",JSON.stringify(rrData))}setCloud("ok","Synced");updateMeta();renderChips()}catch(e){setCloud("err","Offline");toast("Cloud unavailable","e");updateMeta();renderChips()}}
+function saveDB(){localStorage.setItem("lp_db_v4",JSON.stringify(db));schedSave();updateMeta()}
+function savePwds(){localStorage.setItem("lp_pwds_v4",JSON.stringify(pwds));schedSave();updateMeta()}
+function saveRR(){localStorage.setItem("lp_rr_v4",JSON.stringify(rrData));schedSave();toast("Round Robin saved","s")}
+function schedSave(){clearTimeout(_st);setCloud("saving","Saving…");_st=setTimeout(async()=>{try{await fetch(BIN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify({lenders:db,passwords:pwds,rr:rrData})});setCloud("ok","Synced");flashSaved()}catch(e){setCloud("err","Offline")}},800)}
+function setCloud(s,t){const p=document.getElementById("cloud-pill"),tx=document.getElementById("cloud-txt");if(!p)return;p.className="cloud-pill"+(s==="saving"?" saving":s==="err"?" err":"");tx.textContent=t}
+function flashSaved(){const e=document.getElementById("saved-flash");e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),2000)}
+function updateMeta(){const n=Object.keys(db).length,p=pwds.length;["nav-cnt","sb-cnt","h-lenders"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});["nav-pwd","sb-pwd"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=p})}
 
-function toggleLoginEye(btn){
-  const inp = document.getElementById("login-pwd");
-  if(inp.type==="password"){inp.type="text";btn.textContent="🙈"}
-  else{inp.type="password";btn.textContent="👁"}
-}
+function toast(msg,type=""){const w=document.getElementById("toast-wrap"),t=document.createElement("div");t.className="toast"+(type==="s"?" s":type==="e"?" e":"");t.innerHTML=`<div class="ticon">${type==="s"?"✓":type==="e"?"✗":"✦"}</div><span>${msg}</span>`;w.appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add("on")));setTimeout(()=>{t.classList.remove("on");setTimeout(()=>t.remove(),400)},2800)}
 
-function toggleEye(id, btn){
-  const inp = document.getElementById(id);
-  if(inp.type==="password"){inp.type="text";btn.textContent="🙈"}
-  else{inp.type="password";btn.textContent="👁"}
-}
+function cp(text,lbl){navigator.clipboard.writeText(text).then(()=>{toast("Copied: "+(lbl||text.slice(0,40)),"s");window.scrollTo({top:0,behavior:"smooth"})})}
 
-// ── RESET PASSWORD ───────────────────────────────────
-function showReset(){
-  document.getElementById("login-screen").classList.add("hidden");
-  document.getElementById("reset-screen").classList.remove("hidden");
-  document.getElementById("reset-step1").style.display="block";
-  document.getElementById("reset-step2").style.display="none";
-  document.getElementById("reset-code-inp").value="";
-  document.getElementById("reset-err1").classList.remove("show");
-}
+const TITLES={search:"Search Lenders",directory:"Lender Directory",roundrobin:"Round Robin",vault:"Password Vault",add:"Add Lender"};
+function goNav(id,el){document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));document.querySelectorAll(".nitem").forEach(n=>n.classList.remove("on"));document.getElementById("panel-"+id).classList.add("active");document.getElementById("page-title").textContent=TITLES[id]||id;if(el)el.classList.add("on");if(id==="directory")renderTable();if(id==="vault")renderVault();if(id==="roundrobin")renderRR();if(id==="add")clearForm();window.scrollTo({top:0,behavior:"smooth"})}
 
-function hideReset(){
-  document.getElementById("reset-screen").classList.add("hidden");
-  document.getElementById("login-screen").classList.remove("hidden");
-}
-
-function sendResetCode(){
-  // Generate 6-digit code
-  activeResetCode = Math.floor(100000 + Math.random() * 900000).toString();
-  // Store it with 15 min expiry
-  localStorage.setItem("lp_reset_code", activeResetCode);
-  localStorage.setItem("lp_reset_expiry", Date.now() + 15*60*1000);
-  // Open Gmail compose with the code
-  const subject = encodeURIComponent("LenderPro Password Reset Code");
-  const body    = encodeURIComponent(
-    "Your LenderPro password reset code is:\n\n" +
-    "  " + activeResetCode + "\n\n" +
-    "This code expires in 15 minutes.\n\n" +
-    "If you did not request this, ignore this email."
-  );
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(RESET_EMAIL)}&su=${subject}&body=${body}`;
-  window.open(gmailUrl, "_blank");
-  toast("Reset code sent to " + RESET_EMAIL, "s");
-}
-
-function verifyResetCode(){
-  const entered  = document.getElementById("reset-code-inp").value.trim();
-  const stored   = localStorage.getItem("lp_reset_code");
-  const expiry   = parseInt(localStorage.getItem("lp_reset_expiry")||"0");
-  const err      = document.getElementById("reset-err1");
-  if(!stored || Date.now() > expiry){
-    err.textContent = "Code expired. Please request a new one.";
-    err.classList.add("show"); return;
-  }
-  if(entered !== stored){
-    err.textContent = "Invalid code. Please try again.";
-    err.classList.add("show"); return;
-  }
-  // Code correct — show step 2
-  err.classList.remove("show");
-  document.getElementById("reset-step1").style.display="none";
-  document.getElementById("reset-step2").style.display="block";
-}
-
-function setNewPassword(){
-  const p1  = document.getElementById("new-pwd1").value;
-  const p2  = document.getElementById("new-pwd2").value;
-  const err = document.getElementById("reset-err2");
-  if(!p1){ err.textContent="Password cannot be empty."; err.classList.add("show"); return; }
-  if(p1 !== p2){ err.textContent="Passwords do not match."; err.classList.add("show"); return; }
-  // Save new password
-  localStorage.setItem("lp_password", p1);
-  APP_PASSWORD = p1;
-  localStorage.removeItem("lp_reset_code");
-  localStorage.removeItem("lp_reset_expiry");
-  toast("✓ Password updated successfully!", "s");
-  hideReset();
-  document.getElementById("login-pwd").value="";
-}
-
-// Check if already logged in this session
-function checkAuth(){
-  if(sessionStorage.getItem("lp_auth")==="1"){
-    document.getElementById("login-screen").classList.add("hidden");
-    loadFromCloud();
-  }
-}
-
-// ════════════════════════════════════════════════════
-// JSONBIN CLOUD SYNC
-// ════════════════════════════════════════════════════
-const BIN_ID  = "6a272d8ef5f4af5e29cdbcd5";
-const API_KEY = "$2a$10$4QT4KzwLao5T1VAUExkcuuqZV5C/axkZovd3oZUgz2mlKAbqSQ/iG";
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
-const DEFAULT_DB = {};
-
-let db        = JSON.parse(localStorage.getItem("lp_db_v4"))   || JSON.parse(JSON.stringify(DEFAULT_DB));
-let pwds      = JSON.parse(localStorage.getItem("lp_pwds_v4")) || [];
-let saveTimer = null;
-
-// ── LOAD from cloud on startup ───────────────────────
-async function loadFromCloud(){
-  setCloudStatus("loading");
-  try {
-    const res  = await fetch(BIN_URL+"/latest", { headers:{"X-Master-Key":API_KEY} });
-    const json = await res.json();
-    const data = json.record;
-    if(data && data.lenders && Object.keys(data.lenders).length){
-      db   = data.lenders;
-      pwds = data.passwords || [];
-      localStorage.setItem("lp_db_v4",   JSON.stringify(db));
-      localStorage.setItem("lp_pwds_v4", JSON.stringify(pwds));
-    }
-    setCloudStatus("ok");
-    updateMeta(); renderChips();
-  } catch(e){
-    setCloudStatus("err");
-    toast("Cloud load failed — using local cache","e");
-  }
-}
-
-// ── SAVE (debounced 800ms so rapid edits batch up) ───
-function saveDB()  { localStorage.setItem("lp_db_v4",   JSON.stringify(db));   scheduleCloudSave(); updateMeta(); }
-function savePwds(){ localStorage.setItem("lp_pwds_v4", JSON.stringify(pwds)); scheduleCloudSave(); updateMeta(); }
-
-function scheduleCloudSave(){
-  clearTimeout(saveTimer);
-  setCloudStatus("saving");
-  saveTimer = setTimeout(pushToCloud, 800);
-}
-
-async function pushToCloud(){
-  try {
-    await fetch(BIN_URL, {
-      method:"PUT",
-      headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},
-      body: JSON.stringify({ lenders:db, passwords:pwds })
-    });
-    setCloudStatus("ok");
-    flashSaved();
-  } catch(e){
-    setCloudStatus("err");
-    toast("Cloud save failed — saved locally","e");
-  }
-}
-
-// ── CLOUD STATUS ─────────────────────────────────────
-function setCloudStatus(state){
-  const el = document.getElementById("cloud-status");
-  if(!el) return;
-  const map = {
-    loading:{icon:"⟳",text:"Loading…",  col:"var(--orange)"},
-    saving: {icon:"⟳",text:"Saving…",   col:"var(--orange)"},
-    ok:     {icon:"☁",text:"Cloud Synced",col:"var(--green)"},
-    err:    {icon:"⚠",text:"Offline",   col:"var(--red)"}
-  };
-  const s=map[state]||map.ok;
-  el.innerHTML=`<span style="color:${s.col};font-family:var(--mono);font-size:11px;display:flex;align-items:center;gap:5px">${s.icon} ${s.text}</span>`;
-}
-
-function updateMeta(){
-  const n = Object.keys(db).length, p = pwds.length;
-  document.getElementById("nav-cnt").textContent  = n;
-  document.getElementById("nav-pwd").textContent  = p;
-  document.getElementById("sb-cnt").textContent   = n;
-  document.getElementById("sb-pwd").textContent   = p;
-}
-
-// ════════════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════════════
-function toast(msg, type=""){
-  const w=document.getElementById("toast-wrap"), t=document.createElement("div");
-  t.className="toast "+(type==="s"?"s":type==="e"?"e":"");
-  t.innerHTML=`<span>${type==="s"?"✓":type==="e"?"✗":"ℹ"}</span>${msg}`;
-  w.appendChild(t);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add("on")));
-  setTimeout(()=>{t.classList.remove("on");setTimeout(()=>t.remove(),400);},2600);
-}
-
-function flashSaved(){
-  const e=document.getElementById("save-ind");
-  e.classList.add("on"); clearTimeout(e._t);
-  e._t=setTimeout(()=>e.classList.remove("on"),2000);
-}
-
-// ════════════════════════════════════════════════════
-// NAV
-// ════════════════════════════════════════════════════
-const TITLES={search:"Search Lenders",directory:"Lender Directory",add:"Add Lender",vault:"Password Vault"};
-
-function nav(id, el){
-  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-  document.getElementById("panel-"+id).classList.add("active");
-  document.getElementById("page-title").textContent=TITLES[id]||id;
-  if(el) el.classList.add("active");
-  if(id==="directory") renderTable();
-  if(id==="vault")     renderVault();
-  if(id==="add")       clearForm();
-}
-
-// ════════════════════════════════════════════════════
-// COPY
-// ════════════════════════════════════════════════════
-function cp(text, lbl){
-  navigator.clipboard.writeText(text).then(()=>toast("Copied: "+(lbl||text.slice(0,36)),"s"));
-}
-
-// ════════════════════════════════════════════════════
-// SEARCH
-// ════════════════════════════════════════════════════
-function renderChips(){
-  document.getElementById("chips").innerHTML=
-    Object.keys(db).sort().map(c=>`<span class="chip" onclick="quickSearch('${c}')">${c}</span>`).join("");
-}
-
-function quickSearch(code){
-  document.getElementById("srch").value=code;
-  doSearch();
-}
+function renderChips(){document.getElementById("chips").innerHTML=Object.keys(db).sort().map(c=>`<span class="chip" onclick="quickSearch('${c}')">${c}</span>`).join("")}
+function quickSearch(code){document.getElementById("srch").value=code;doSearch()}
 
 function doSearch(){
   const raw=document.getElementById("srch").value.trim();
-  const container=document.getElementById("search-results");
-  if(!raw){container.innerHTML="";return;}
-  const codes=raw.toUpperCase().split(/[\s,]+/).filter(Boolean);
-  let html="", found=0, allTo=[], allCc=[];
-
-  codes.forEach((code,i)=>{
-    const l=db[code]; if(!l) return; found++;
+  const box=document.getElementById("search-results");
+  if(!raw){box.innerHTML="";return}
+  const inputCodes=raw.toUpperCase().split(/[\s,]+/).filter(Boolean);
+  const seen={},dupes=[];inputCodes.forEach(c=>{if(seen[c])dupes.push(c);seen[c]=true});
+  const dupeWarn=dupes.length?`<div class="dupe-warn">⚠ Duplicate detected: <strong>${[...new Set(dupes)].join(", ")}</strong> — showing both entries</div>`:"";
+  let html="",found=0,allTo=[],allCc=[];
+  inputCodes.forEach((code,i)=>{
+    const l=db[code];if(!l)return;found++;
     const toList=l.to?l.to.split(",").map(e=>e.trim()).filter(Boolean):[];
     const ccList=l.cc?l.cc.split(",").map(e=>e.trim()).filter(Boolean):[];
-    allTo.push(...toList); allCc.push(...ccList);
-
-    const toPills=toList.map(e=>`
-      <span class="epill">
-        <span class="etext">${e}</span>
-        <button class="cbtn" onclick="cp('${e}','${e}')">⧉</button>
-      </span>`).join("")||`<span style="color:var(--muted);font-size:12px">—</span>`;
-
-    const ccPills=ccList.map(e=>`
-      <span class="epill">
-        <span class="etext">${e}</span>
-        <button class="cbtn" onclick="cp('${e}','${e}')">⧉</button>
-      </span>`).join("")||`<span style="color:var(--muted);font-size:12px">—</span>`;
-
-    const gUrl=gmailUrl(toList, ccList);
-
-    html+=`
-    <div class="res-card" style="animation-delay:${i*.06}s">
-      <div class="res-head">
-        <div class="res-meta">
-          <span class="code-pill">${code}</span>
-          <span class="lender-name">${l.name}</span>
-          ${l.notes?`<span class="notes-tag">${l.notes}</span>`:""}
+    toList.forEach(e=>{if(!allTo.includes(e))allTo.push(e)});
+    ccList.forEach(e=>{if(!allCc.includes(e))allCc.push(e)});
+    const makeRows=(list,field)=>list.map((e,ei)=>`
+      <div class="email-row">
+        <span class="email-display" onclick="startEdit('${code}','${field}',${ei},this)">${e}</span>
+        <input class="email-edit-inp" value="${e}" onblur="saveEdit('${code}','${field}',${ei},this)" onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape')cancelEdit(this)">
+        <div class="row-btns">
+          <button class="rbtn" onclick="cp('${e}','${e}')">⧉</button>
+          <button class="rbtn del" onclick="delEmail('${code}','${field}',${ei})">✕</button>
         </div>
-        <div style="display:flex;gap:6px;align-items:center">
-          <button class="btn-gmail btn-gmail-sm" onclick="window.open('${gUrl}','_blank')">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.909 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+      </div>`).join("")+`<button class="add-row" onclick="addEmail('${code}','${field}')">+ Add ${field.toUpperCase()}</button>`;
+    const ccAll=ccList.length>1?`<button class="esec-copy-all" onclick="cp('${ccList.join(",")}','All CC for ${code}')">⧉ Copy All</button>`:"";
+    const toAll=toList.length>1?`<button class="esec-copy-all" onclick="cp('${toList.join(",")}','All TO for ${code}')">⧉ Copy All</button>`:"";
+    const gUrl="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(toList.join(","))+"&cc="+encodeURIComponent(ccList.join(","));
+    const dupeBadge=dupes.includes(code)?`<span style="background:var(--amber-l);color:var(--amber);font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid rgba(230,126,34,.2);font-family:var(--mono)">#${inputCodes.slice(0,i+1).filter(x=>x===code).length}</span>`:"";
+    html+=`
+    <div class="rcard" style="animation-delay:${i*.07}s">
+      <div class="rcard-head">
+        <div class="rcard-meta">
+          <span class="code-badge">${code}</span>
+          <span class="rcard-name">${l.name}</span>
+          ${l.notes?`<span class="note-badge">${l.notes}</span>`:""}
+          ${dupeBadge}
+        </div>
+        <div class="rcard-actions">
+          <button class="btn-gmail" onclick="window.open('${gUrl}','_blank')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.909 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
             Gmail
           </button>
-          <button class="btn btn-ghost btn-sm" onclick="editLender('${code}')">✏ Edit</button>
+          <button class="btn btn-outline btn-sm" onclick="editLender('${code}')">✏ Edit</button>
+          <button class="btn btn-xs btn-rose" onclick="delLender('${code}')">🗑</button>
         </div>
       </div>
-      <div class="res-body">
-        <div class="email-grp"><div class="grp-lbl">TO</div>${toPills}</div>
-        <div class="email-grp"><div class="grp-lbl">CC</div>${ccPills}</div>
+      <div class="rcard-body">
+        <div><div class="esec-label"><span>TO</span><div class="esec-line"></div>${toAll}</div>${makeRows(toList,"to")}</div>
+        <div><div class="esec-label"><span>CC</span><div class="esec-line"></div>${ccAll}</div>${makeRows(ccList,"cc")}</div>
       </div>
     </div>`;
   });
-
-  if(!found){
-    container.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><div class="empty-ttl">No lenders found</div><div>Searched: <strong>${raw.toUpperCase()}</strong></div></div>`;
-    return;
-  }
-
-  allTo=[...new Set(allTo)]; allCc=[...new Set(allCc)];
+  if(!found){box.innerHTML=dupeWarn+`<div class="empty"><div class="empty-ico">🔍</div><div class="empty-t">No lenders found</div><div>Searched: <strong>${raw.toUpperCase()}</strong></div></div>`;return}
   const allE=[...new Set([...allTo,...allCc])];
-
-  const strip=`
-    <div class="combined-strip">
-      <div class="cs-label">⚡ ${found} lender${found>1?"s":""} · combined</div>
-      <div class="cs-actions">
-        <button class="btn btn-secondary btn-sm" onclick="cp('${allTo.join(",")}','All TO')">⧉ Copy All TO</button>
-        <button class="btn btn-secondary btn-sm" onclick="cp('${allCc.join(",")}','All CC')">⧉ Copy All CC</button>
-        <button class="btn btn-secondary btn-sm" onclick="cp('${allE.join(",")}','All emails')">⧉ Copy All</button>
-        <button class="btn-gmail" onclick="openAllGmail(${JSON.stringify(codes).replace(/"/g,'&quot;')})">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.909 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-          Open All (${found}) in Gmail
+  box.innerHTML=dupeWarn+html+`
+    <div class="combined-bar">
+      <div style="display:flex;align-items:center;gap:9px"><span class="cb-tag">✦ ${found} result${found>1?"s":""}</span><span class="cb-label">Combined output</span></div>
+      <div class="cb-actions">
+        <button class="cb-btn" onclick="cp('${allTo.join(",")}','All TO')">⧉ Copy TO</button>
+        <button class="cb-btn" onclick="cp('${allCc.join(",")}','All CC')">⧉ Copy CC</button>
+        <button class="cb-btn" onclick="cp('${allE.join(",")}','All emails')">⧉ Copy All</button>
+        <button class="btn-gmail" style="padding:7px 14px" onclick="openAllGmail(${JSON.stringify(inputCodes).replace(/"/g,'&quot;')})">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.909 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+          Open All (${found}) Gmail
         </button>
       </div>
     </div>`;
-
-  container.innerHTML=html+strip;
 }
 
-function gmailUrl(toList, ccList){
-  const to=encodeURIComponent(toList.join(","));
-  const cc=encodeURIComponent(ccList.join(","));
-  return `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&cc=${cc}`;
-}
+function openAllGmail(codes){let d=0,o=0;codes.forEach(code=>{const l=db[code];if(!l)return;const to=l.to?l.to.split(",").map(e=>e.trim()).filter(Boolean):[];const cc=l.cc?l.cc.split(",").map(e=>e.trim()).filter(Boolean):[];setTimeout(()=>window.open("https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(to.join(","))+"&cc="+encodeURIComponent(cc.join(",")),"_blank"),d);d+=400;o++});toast("Opened "+o+" Gmail windows","s")}
 
-function openAllGmail(codes){
-  let delay=0;
-  codes.forEach(code=>{
-    const l=db[code]; if(!l) return;
-    const toList=l.to?l.to.split(",").map(e=>e.trim()).filter(Boolean):[];
-    const ccList=l.cc?l.cc.split(",").map(e=>e.trim()).filter(Boolean):[];
-    setTimeout(()=>window.open(gmailUrl(toList,ccList),"_blank"), delay);
-    delay+=400;
-  });
-  toast(`Opened ${codes.length} Gmail compose windows`,"s");
-}
+function startEdit(code,field,idx,span){const row=span.closest(".email-row");const inp=row.querySelector(".email-edit-inp");span.style.display="none";inp.style.display="block";inp.focus();inp.select();row.classList.add("editing")}
+function saveEdit(code,field,idx,inp){const val=inp.value.trim();const row=inp.closest(".email-row");const span=row.querySelector(".email-display");row.classList.remove("editing");if(!val){delEmail(code,field,idx);return}const list=(db[code][field]||"").split(",").map(e=>e.trim()).filter(Boolean);list[idx]=val;db[code][field]=list.join(",");saveDB();span.textContent=val;inp.value=val;span.style.display="";inp.style.display="none";toast("Updated "+code+" · "+field,"s");window.scrollTo({top:0,behavior:"smooth"})}
+function cancelEdit(inp){const row=inp.closest(".email-row");const span=row.querySelector(".email-display");row.classList.remove("editing");inp.value=span.textContent;span.style.display="";inp.style.display="none"}
+function delEmail(code,field,idx){const list=(db[code][field]||"").split(",").map(e=>e.trim()).filter(Boolean);list.splice(idx,1);db[code][field]=list.join(",");saveDB();doSearch();toast("Removed email","s")}
+function addEmail(code,field){const val=prompt("Add new "+field.toUpperCase()+" email for "+code+":");if(!val||!val.trim())return;const list=(db[code][field]||"").split(",").map(e=>e.trim()).filter(Boolean);list.push(val.trim());db[code][field]=list.join(",");saveDB();doSearch();toast("Added to "+code,"s")}
 
-// ════════════════════════════════════════════════════
-// DIRECTORY TABLE
-// ════════════════════════════════════════════════════
 function renderTable(){
   const keys=Object.keys(db).sort();
   const allTO=Object.values(db).flatMap(l=>l.to?l.to.split(",").filter(Boolean):[]);
   const allCC=Object.values(db).flatMap(l=>l.cc?l.cc.split(",").filter(Boolean):[]);
-  document.getElementById("stats-row").innerHTML=`
-    <div class="stat"><div class="stat-v">${keys.length}</div><div class="stat-l">Total Lenders</div></div>
-    <div class="stat"><div class="stat-v">${allTO.length}</div><div class="stat-l">TO Addresses</div></div>
-    <div class="stat"><div class="stat-v">${allCC.length}</div><div class="stat-l">CC Addresses</div></div>
-    <div class="stat"><div class="stat-v">${allTO.length+allCC.length}</div><div class="stat-l">Total Emails</div></div>`;
-  document.getElementById("tbl-body").innerHTML=keys.map((code,i)=>{
-    const l=db[code];
-    return `<tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:11px">${i+1}</td>
-      <td><span class="code-tag">${code}</span></td>
-      <td><input class="cell-edit" value="${esc(l.name)}" onchange="cellUpdate('${code}','name',this.value)"></td>
-      <td><input class="cell-edit" value="${esc(l.to)}" onchange="cellUpdate('${code}','to',this.value)" style="min-width:200px"></td>
-      <td><input class="cell-edit" value="${esc(l.cc)}" onchange="cellUpdate('${code}','cc',this.value)" style="min-width:160px"></td>
-      <td><input class="cell-edit" value="${esc(l.notes)}" onchange="cellUpdate('${code}','notes',this.value)"></td>
-      <td>
-        <div style="display:flex;gap:5px">
-          <button class="btn btn-ghost btn-sm" onclick="editLender('${code}')">✏</button>
-          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="delLender('${code}')">🗑</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join("");
-}
-
+  document.getElementById("stats-grid").innerHTML=`<div class="stat-card"><div class="stat-v">${keys.length}</div><div class="stat-l">Lenders</div></div><div class="stat-card"><div class="stat-v">${allTO.length}</div><div class="stat-l">TO Addresses</div></div><div class="stat-card"><div class="stat-v">${allCC.length}</div><div class="stat-l">CC Addresses</div></div><div class="stat-card"><div class="stat-v">${allTO.length+allCC.length}</div><div class="stat-l">Total Emails</div></div>`;
+  document.getElementById("tbl-body").innerHTML=keys.map((code,i)=>{const l=db[code];return `<tr><td style="color:var(--muted);font-family:var(--mono);font-size:10px">${i+1}</td><td><input class="code-cell-inp" value="${esc(code)}" data-old="${esc(code)}" onchange="changeCode('${esc(code)}',this.value,this)"></td><td><input class="cell-inp" value="${esc(l.name)}" onchange="cellSave('${code}','name',this.value)"></td><td><input class="cell-inp" value="${esc(l.to)}" onchange="cellSave('${code}','to',this.value)" style="min-width:180px"></td><td><input class="cell-inp" value="${esc(l.cc)}" onchange="cellSave('${code}','cc',this.value)" style="min-width:150px"></td><td><input class="cell-inp" value="${esc(l.notes)}" onchange="cellSave('${code}','notes',this.value)"></td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editLender('${code}')">✏</button><button class="btn btn-xs btn-rose" onclick="delLender('${code}')">🗑</button></div></td></tr>`;}).join("")}
 function esc(s){return(s||"").replace(/"/g,"&quot;")}
-function cellUpdate(code,field,val){db[code][field]=val.trim();saveDB();toast(`${code} · ${field} saved`,"s")}
-function delLender(code){
-  if(!confirm(`Delete "${code}"?`)) return;
-  delete db[code]; saveDB(); renderTable(); renderChips();
-  toast(`Deleted ${code}`,"e");
-}
+function cellSave(code,field,val){if(!db[code])return;db[code][field]=val.trim();saveDB();toast(code+" saved","s");window.scrollTo({top:0,behavior:"smooth"})}
+function changeCode(oldCode,newCode,inp){newCode=newCode.trim().toUpperCase();if(!newCode||newCode===oldCode){inp.value=oldCode;return}if(db[newCode]){toast("Code '"+newCode+"' already exists!","e");inp.value=oldCode;return}db[newCode]=db[oldCode];delete db[oldCode];saveDB();renderTable();renderChips();toast("Renamed: "+oldCode+" → "+newCode,"s")}
+function delLender(code){if(!confirm('Delete "'+code+'"?'))return;delete db[code];saveDB();renderTable();renderChips();toast("Deleted "+code,"e")}
 
-// ════════════════════════════════════════════════════
-// LENDER FORM
-// ════════════════════════════════════════════════════
-function editLender(code){
-  const l=db[code]; if(!l) return;
-  document.getElementById("f-code").value=code;
-  document.getElementById("f-name").value=l.name;
-  document.getElementById("f-to").value=l.to;
-  document.getElementById("f-cc").value=l.cc;
-  document.getElementById("f-notes").value=l.notes;
-  document.getElementById("form-ttl").textContent=`✏ Editing: ${code}`;
-  nav("add",null);
-  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-}
+function editLender(code){const l=db[code];if(!l)return;document.getElementById("f-code").value=code;document.getElementById("f-name").value=l.name;document.getElementById("f-to").value=l.to;document.getElementById("f-cc").value=l.cc;document.getElementById("f-notes").value=l.notes;document.getElementById("form-ttl").textContent="Editing: "+code;goNav("add",null);document.querySelectorAll(".nitem").forEach(n=>n.classList.remove("on"))}
+function saveLender(){const code=document.getElementById("f-code").value.trim().toUpperCase();const name=document.getElementById("f-name").value.trim();const msg=document.getElementById("fmsg");if(!code){msg.textContent="⚠ Code required";msg.style.color="var(--rose)";return}if(!name){msg.textContent="⚠ Name required";msg.style.color="var(--rose)";return}const isNew=!db[code];db[code]={name,to:document.getElementById("f-to").value.trim(),cc:document.getElementById("f-cc").value.trim(),notes:document.getElementById("f-notes").value.trim()};saveDB();renderChips();toast(isNew?"✓ "+code+" added":"✓ "+code+" updated","s");msg.textContent=isNew?"✓ "+code+" added!":"✓ "+code+" updated!";msg.style.color="var(--emerald)";setTimeout(()=>{msg.textContent="";document.getElementById("form-ttl").textContent="Add New Lender"},3000);if(isNew)clearForm()}
+function clearForm(){["f-code","f-name","f-to","f-cc","f-notes"].forEach(id=>document.getElementById(id).value="");document.getElementById("fmsg").textContent="";document.getElementById("form-ttl").textContent="Add New Lender"}
 
-function saveLender(){
-  const code=document.getElementById("f-code").value.trim().toUpperCase();
-  const name=document.getElementById("f-name").value.trim();
-  const msg=document.getElementById("fmsg");
-  if(!code){msg.textContent="⚠ Code required";msg.style.color="var(--red)";return}
-  if(!name){msg.textContent="⚠ Name required";msg.style.color="var(--red)";return}
-  const isNew=!db[code];
-  db[code]={name,to:document.getElementById("f-to").value.trim(),cc:document.getElementById("f-cc").value.trim(),notes:document.getElementById("f-notes").value.trim()};
-  saveDB(); renderChips();
-  toast(isNew?`✓ ${code} added`:`✓ ${code} updated`,"s");
-  msg.textContent=isNew?`✓ ${code} added!`:`✓ ${code} updated!`;
-  msg.style.color="var(--green)";
-  setTimeout(()=>{msg.textContent="";document.getElementById("form-ttl").textContent="➕ Add New Lender"},3000);
-  if(isNew) clearForm();
-}
+let _rrRole="";
+const RR_ROLES=[{key:"owner",label:"Owner",cls:"owner"},{key:"pricing",label:"Pricing Manager",cls:"pricing"},{key:"funding",label:"Funding Coordinator",cls:"funding"}];
+function renderRR(){document.getElementById("rr-grid").innerHTML=RR_ROLES.map(r=>{const data=rrData[r.key];const agents=data.agents||[];const turn=data.turn||0;const next=agents.length?agents[turn%agents.length]:null;const rows=agents.map((a,i)=>`<div class="rr-agent${i===turn%agents.length?" active-turn":""}" onclick="setTurn('${r.key}',${i})"><div class="rr-agent-name">${a.name}</div><div class="rr-agent-right">${a.cap?`<span class="rr-cap">$${Number(a.cap).toLocaleString()}</span>`:""}<div class="rr-dot"></div><button class="rbtn del" style="font-size:11px" onclick="event.stopPropagation();delRRAgent('${r.key}',${i})">✕</button></div></div>`).join("");return `<div class="rr-card"><div class="rr-head"><div class="rr-role ${r.cls}">${r.label}</div><span class="rr-badge ${r.cls}">${agents.length} agent${agents.length!==1?"s":""}</span></div><div class="rr-body">${rows||`<div style="text-align:center;padding:14px;color:var(--muted);font-size:12px">No agents yet</div>`}<button class="rr-add" onclick="openAddAgent('${r.key}')">+ Add Agent</button></div><div class="rr-foot"><div class="rr-next">${next?`Turn: <span>${next.name}</span>`:"<span>—</span>"}</div><div style="display:flex;gap:5px">${agents.length?`<button class="btn btn-outline btn-xs" onclick="nextTurn('${r.key}')">Next →</button><button class="btn btn-outline btn-xs" onclick="resetTurn('${r.key}')">↺</button>`:""}</div></div></div>`}).join("")}
+function setTurn(role,idx){rrData[role].turn=idx;renderRR()}
+function nextTurn(role){const a=rrData[role].agents;if(!a.length)return;rrData[role].turn=(rrData[role].turn+1)%a.length;renderRR();toast("Next: "+a[rrData[role].turn].name,"s")}
+function resetTurn(role){rrData[role].turn=0;renderRR();toast("Reset","s")}
+function openAddAgent(role){_rrRole=role;document.getElementById("rr-agent-name").value="";document.getElementById("rr-agent-cap").value="";document.getElementById("rr-modal-ttl").textContent="Add Agent — "+RR_ROLES.find(r=>r.key===role).label;document.getElementById("rr-modal").classList.add("open")}
+function saveRRAgent(){const name=document.getElementById("rr-agent-name").value.trim();if(!name){toast("Name required","e");return}const cap=document.getElementById("rr-agent-cap").value.trim();rrData[_rrRole].agents.push({name,cap:cap||""});document.getElementById("rr-modal").classList.remove("open");renderRR();saveRR()}
+function delRRAgent(role,idx){if(!confirm("Remove agent?"))return;rrData[role].agents.splice(idx,1);if(rrData[role].turn>=rrData[role].agents.length)rrData[role].turn=0;renderRR();saveRR()}
 
-function clearForm(){
-  ["f-code","f-name","f-to","f-cc","f-notes"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("fmsg").textContent="";
-  document.getElementById("form-ttl").textContent="➕ Add New Lender";
-}
-
-// ════════════════════════════════════════════════════
-// PASSWORD VAULT
-// ════════════════════════════════════════════════════
-let editPwdIdx=-1;
-
-function openPwdModal(idx=-1){
-  editPwdIdx=idx;
-  const modal=document.getElementById("pwd-modal");
-  if(idx>=0){
-    const p=pwds[idx];
-    document.getElementById("pm-name").value=p.name||"";
-    document.getElementById("pm-user").value=p.user||"";
-    document.getElementById("pm-pwd").value=p.pwd||"";
-    document.getElementById("pm-url").value=p.url||"";
-    document.getElementById("pm-cat").value=p.cat||"";
-    document.getElementById("modal-ttl").textContent="✏ Edit Entry";
-  } else {
-    ["pm-name","pm-user","pm-pwd","pm-url","pm-cat"].forEach(id=>document.getElementById(id).value="");
-    document.getElementById("modal-ttl").textContent="🔐 Add Password Entry";
-  }
-  modal.classList.add("open");
-}
-
+let _eidx=-1;
+function openPwdModal(idx=-1){_eidx=idx;if(idx>=0){const p=pwds[idx];document.getElementById("pm-name").value=p.name||"";document.getElementById("pm-user").value=p.user||"";document.getElementById("pm-pwd").value=p.pwd||"";document.getElementById("pm-url").value=p.url||"";document.getElementById("pm-cat").value=p.cat||"";document.getElementById("modal-ttl").textContent="Edit Entry"}else{["pm-name","pm-user","pm-pwd","pm-url","pm-cat"].forEach(id=>document.getElementById(id).value="");document.getElementById("modal-ttl").textContent="Add Password Entry"}document.getElementById("pwd-modal").classList.add("open")}
 function closePwdModal(){document.getElementById("pwd-modal").classList.remove("open")}
+function savePwd(){const name=document.getElementById("pm-name").value.trim();if(!name){toast("Name required","e");return}const entry={name,user:document.getElementById("pm-user").value.trim(),pwd:document.getElementById("pm-pwd").value,url:document.getElementById("pm-url").value.trim(),cat:document.getElementById("pm-cat").value.trim()};if(_eidx>=0)pwds[_eidx]=entry;else pwds.push(entry);savePwds();renderVault();closePwdModal();toast(_eidx>=0?"✓ "+name+" updated":"✓ "+name+" saved","s")}
+function delPwd(idx){if(!confirm('Delete "'+pwds[idx].name+'"?'))return;pwds.splice(idx,1);savePwds();renderVault();toast("Deleted","e")}
+function togglePwdVis(id,btn){const i=document.getElementById(id);i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈"}
+function renderVault(){const g=document.getElementById("pwd-grid");if(!pwds.length){g.innerHTML='<div class="empty"><div class="empty-ico">🔒</div><div class="empty-t">No entries yet</div></div>';return}window._pwds=pwds;g.innerHTML=pwds.map((p,i)=>`<div class="pwd-card"><div class="pwd-card-top"><div class="pwd-name">${p.name}</div>${p.cat?`<span class="pwd-cat">${p.cat}</span>`:""}</div>${p.user?`<div class="pwd-row"><span class="pwd-lbl">USER</span><span class="pwd-val">${p.user}</span><div class="pwd-acts"><button class="ibt" onclick="cp('${p.user.replace(/'/g,"\\'")}','${p.name} user')">⧉</button></div></div>`:""} ${p.pwd?`<div class="pwd-row"><span class="pwd-lbl">PASS</span><span class="pwd-val masked" id="pv${i}">••••••••</span><div class="pwd-acts"><button class="ibt" id="eye${i}" onclick="tvlt(${i})">👁</button><button class="ibt" onclick="cp(window._pwds[${i}].pwd,'${p.name} pwd')">⧉</button></div></div>`:""}${p.url?`<a href="${p.url}" target="_blank" class="pwd-url">🔗 ${p.url}</a>`:""}<div class="pwd-foot"><button class="btn btn-outline btn-sm" onclick="openPwdModal(${i})">✏ Edit</button><button class="btn btn-sm btn-rose" onclick="delPwd(${i})">🗑</button></div></div>`).join("")}
+function tvlt(i){const el=document.getElementById("pv"+i),btn=document.getElementById("eye"+i);if(el.classList.contains("masked")){el.textContent=window._pwds[i].pwd;el.classList.remove("masked");btn.textContent="🙈"}else{el.textContent="••••••••";el.classList.add("masked");btn.textContent="👁"}}
 
-function savePwd(){
-  const name=document.getElementById("pm-name").value.trim();
-  if(!name){toast("Name is required","e");return}
-  const entry={name,user:document.getElementById("pm-user").value.trim(),pwd:document.getElementById("pm-pwd").value,url:document.getElementById("pm-url").value.trim(),cat:document.getElementById("pm-cat").value.trim()};
-  if(editPwdIdx>=0) pwds[editPwdIdx]=entry; else pwds.push(entry);
-  savePwds(); renderVault(); closePwdModal();
-  toast(editPwdIdx>=0?`✓ ${name} updated`:`✓ ${name} saved`,"s");
-}
+function exportCSV(){const rows=[["Code","Name","TO Emails","CC Emails","Notes"]];Object.entries(db).sort().forEach(([c,l])=>rows.push([c,l.name,l.to,l.cc,l.notes]));const csv=rows.map(r=>r.map(c=>`"${(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");const a=Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:"lenders_"+new Date().toISOString().slice(0,10)+".csv"});a.click();toast("📥 CSV downloaded","s")}
 
-function delPwd(idx){
-  if(!confirm(`Delete "${pwds[idx].name}"?`)) return;
-  pwds.splice(idx,1); savePwds(); renderVault();
-  toast("Entry deleted","e");
-}
-
-function togglePwdVis(inputId, btn){
-  const inp=document.getElementById(inputId);
-  if(inp.type==="password"){inp.type="text";btn.textContent="🙈"}
-  else{inp.type="password";btn.textContent="👁"}
-}
-
-function renderVault(){
-  const grid=document.getElementById("pwd-grid");
-  if(!pwds.length){
-    grid.innerHTML=`<div class="empty"><div class="empty-ico">🔒</div><div class="empty-ttl">No entries yet</div><div>Click "+ Add Entry" to save a password</div></div>`;
-    return;
-  }
-  grid.innerHTML=pwds.map((p,i)=>`
-    <div class="pwd-card">
-      <div class="pwd-card-head">
-        <div class="pwd-name">${p.name}</div>
-        ${p.cat?`<span class="pwd-category">${p.cat}</span>`:""}
-      </div>
-      ${p.user?`
-      <div class="pwd-field">
-        <span class="pwd-field-lbl">USER</span>
-        <span class="pwd-field-val">${p.user}</span>
-        <div class="pwd-actions">
-          <button class="icon-btn" onclick="cp('${p.user}','${p.name} username')" title="Copy">⧉</button>
-        </div>
-      </div>`:""}
-      ${p.pwd?`
-      <div class="pwd-field">
-        <span class="pwd-field-lbl">PASS</span>
-        <span class="pwd-field-val masked" id="pv-${i}">••••••••••</span>
-        <div class="pwd-actions">
-          <button class="icon-btn" id="eye-${i}" onclick="toggleVaultVis(${i})" title="Show/Hide">👁</button>
-          <button class="icon-btn" onclick="cp('${p.pwd.replace(/'/g,"\\'")}','${p.name} password')" title="Copy">⧉</button>
-        </div>
-      </div>`:""}
-      ${p.url?`<a href="${p.url}" target="_blank" class="pwd-link">🔗 ${p.url}</a>`:""}
-      <div class="pwd-card-actions">
-        <button class="btn btn-secondary btn-sm" onclick="openPwdModal(${i})">✏ Edit</button>
-        <button class="btn btn-sm" style="background:var(--red-l);color:var(--red);border:1px solid #fecaca" onclick="delPwd(${i})">🗑 Delete</button>
-      </div>
-    </div>`).join("");
-  // store passwords for reveal
-  window._pwds=pwds;
-}
-
-function toggleVaultVis(i){
-  const el=document.getElementById("pv-"+i);
-  const btn=document.getElementById("eye-"+i);
-  if(el.classList.contains("masked")){
-    el.textContent=window._pwds[i].pwd;
-    el.classList.remove("masked");
-    btn.textContent="🙈";
-  } else {
-    el.textContent="••••••••••";
-    el.classList.add("masked");
-    btn.textContent="👁";
-  }
-}
-
-// ════════════════════════════════════════════════════
-// EXPORT
-// ════════════════════════════════════════════════════
-function exportCSV(){
-  const rows=[["Code","Name","TO Emails","CC Emails","Notes"]];
-  Object.entries(db).sort().forEach(([code,l])=>rows.push([code,l.name,l.to,l.cc,l.notes]));
-  const csv=rows.map(r=>r.map(c=>`"${(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");
-  const a=Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:"lenders_"+new Date().toISOString().slice(0,10)+".csv"});
-  a.click(); toast("📥 CSV downloaded · open in Excel","s");
-}
-
-// ════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════
-updateMeta();
-renderChips();
-checkAuth();
+updateMeta();renderChips();checkAuth();
 </script>
 </body>
 </html>
