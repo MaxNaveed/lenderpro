@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max GPT — premium, unlimited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#11141A;
+    --bg-elevated:#181C24;
+    --bg-raised:#1F2430;
+    --accent:#F2A93B;
+    --accent-dim:#B9822A;
+    --text:#F2EFE6;
+    --text-muted:#8B9099;
+    --user-bubble:#1E2630;
+    --assistant-bubble:#1A1D24;
+    --border:#262B33;
+    --danger:#D9694F;
+    --success:#6FAE8C;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+  }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(242,169,59,0.05), transparent);
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(8px);
+  }
+  .wordmark{
+    font-family:'Fraunces',serif; font-weight:800; font-size:21px; letter-spacing:-0.01em;
+    display:flex; align-items:baseline; gap:6px; cursor:pointer; user-select:none;
+  }
+  .wordmark .glyph{ color:var(--accent); font-weight:600; }
+  .brand{ display:flex; flex-direction:column; gap:2px; }
+  .brand-center{ align-items:center; }
+  .powered-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.04em;
+    color:var(--text-muted); text-transform:lowercase;
+  }
+  .nav-links{ display:flex; align-items:center; gap:26px; }
+  .nav-links a{ font-size:14px; color:var(--text-muted); text-decoration:none; cursor:pointer; transition:color .15s; }
+  .nav-links a:hover{ color:var(--text); }
+  .btn{
+    font-size:14px; font-weight:600; border-radius:10px; padding:9px 16px; cursor:pointer;
+    border:1px solid var(--border); background:transparent; color:var(--text);
+    transition:border-color .15s, background .15s, transform .1s;
+  }
+  .btn:hover{ border-color:var(--text-muted); }
+  .btn:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--accent); border:none; color:#1A1306; }
+  .btn-primary:hover{ background:#FFC15C; }
+  .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  #view-landing{ display:block; }
+  .hero{ max-width:760px; margin:0 auto; padding:90px 24px 60px; text-align:center; }
+  .hero .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--accent); border:1px solid var(--accent-dim); background:rgba(242,169,59,0.08);
+    padding:6px 14px; border-radius:100px; display:inline-block; margin-bottom:22px;
+  }
+  .hero h1{ font-family:'Fraunces',serif; font-weight:700; font-size:clamp(34px,5vw,54px); line-height:1.1; margin:0 0 18px; }
+  .hero h1 .accent-word{ color:var(--accent); }
+  .hero p{ font-size:16px; color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto 32px; }
+  .hero .hero-actions{ display:flex; gap:12px; justify-content:center; }
+  .hero .hero-actions .btn{ padding:12px 22px; font-size:15px; }
+  .infinity-divider{ display:flex; justify-content:center; margin:8px 0 0; }
+  .infinity-divider svg path{ fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linecap:round; }
+
+  section{ max-width:980px; margin:0 auto; padding:64px 24px; }
+  section.bordered{ border-top:1px solid var(--border); }
+  .section-head{ margin-bottom:36px; text-align:center; }
+  .section-head .eyebrow-small{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--text-muted); margin-bottom:8px; display:block;
+  }
+  .section-head h2{ font-family:'Fraunces',serif; font-weight:600; font-size:30px; margin:0 0 10px; }
+  .section-head p{ color:var(--text-muted); font-size:15px; max-width:480px; margin:0 auto; }
+
+  .pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .plan-card{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px;
+    padding:28px 24px; display:flex; flex-direction:column; gap:18px; position:relative;
+  }
+  .plan-card.featured{ border-color:var(--accent-dim); background:linear-gradient(160deg, rgba(242,169,59,0.08), var(--bg-elevated)); }
+  .plan-tag{
+    position:absolute; top:-12px; right:24px; font-family:'JetBrains Mono',monospace;
+    font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+    background:var(--accent); color:#1A1306; padding:4px 10px; border-radius:100px;
+  }
+  .plan-name{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); }
+  .plan-price{ font-family:'Fraunces',serif; font-size:36px; font-weight:700; display:flex; align-items:baseline; gap:6px; }
+  .plan-price .per{ font-family:'Inter',sans-serif; font-size:13px; color:var(--text-muted); font-weight:400; }
+  .plan-gst{ font-size:12px; color:var(--text-muted); margin-top:-12px; }
+  .plan-features{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .plan-features li{ font-size:14px; color:var(--text); display:flex; align-items:flex-start; gap:8px; }
+  .plan-features li::before{ content:'✓'; color:var(--success); font-weight:700; flex-shrink:0; }
+  .plan-card .btn{ width:100%; padding:11px; text-align:center; }
+  .currency-note{ text-align:center; font-size:12px; color:var(--text-muted); margin-top:18px; font-family:'JetBrains Mono',monospace; }
+
+  .security-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .security-card{ background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; padding:22px; }
+  .security-card .icon{ color:var(--accent); margin-bottom:12px; }
+  .security-card h3{ font-size:15px; margin:0 0 8px; font-weight:600; }
+  .security-card p{ font-size:13.5px; color:var(--text-muted); line-height:1.6; margin:0; }
+
+  footer{ border-top:1px solid var(--border); padding:32px 24px 40px; text-align:center; color:var(--text-muted); font-size:13px; }
+  footer .support-line{ margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:12px; }
+  footer a.support-email{ color:var(--accent); text-decoration:none; }
+
+  #view-login{ display:none; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+  .login-card{ width:100%; max-width:380px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:20px; padding:36px 30px; margin:60px auto; }
+  .login-card .wordmark{ justify-content:center; display:flex; margin-bottom:6px; cursor:default; }
+  .login-card .login-sub{ text-align:center; color:var(--text-muted); font-size:13.5px; margin-bottom:28px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px; font-family:'JetBrains Mono',monospace; letter-spacing:0.03em; }
+  .field input{
+    width:100%; background:var(--bg-raised); border:1px solid var(--border); border-radius:10px;
+    padding:11px 13px; color:var(--text); font-size:14.5px; outline:none; transition:border-color .15s;
+  }
+  .field input:focus{ border-color:var(--accent-dim); }
+  .login-card .btn-primary{ width:100%; padding:12px; font-size:15px; margin-top:6px; }
+  .login-divider{ display:flex; align-items:center; gap:10px; margin:20px 0; color:var(--text-muted); font-size:12px; }
+  .login-divider::before, .login-divider::after{ content:''; flex:1; height:1px; background:var(--border); }
+  .guest-link{ display:block; text-align:center; font-size:13.5px; color:var(--text-muted); cursor:pointer; text-decoration:underline; }
+  .guest-link:hover{ color:var(--text); }
+  .privacy-note{ margin-top:22px; font-size:11.5px; color:var(--text-muted); text-align:center; line-height:1.6; }
+  .back-link{ display:block; text-align:center; margin-top:18px; font-size:13px; color:var(--text-muted); cursor:pointer; }
+  .back-link:hover{ color:var(--text); }
+
+  #view-app{ display:none; flex-direction:column; height:100vh; overflow:hidden; }
+  #view-app header{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:1px solid var(--border); flex-shrink:0; }
+  #view-app .header-right{ display:flex; align-items:center; gap:10px; }
+  .badge{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--accent); border:1px solid var(--accent-dim); padding:5px 10px; border-radius:100px; background:rgba(242,169,59,0.08);
+  }
+  .icon-btn{
+    font-size:13px; color:var(--text-muted); background:transparent; border:1px solid var(--border);
+    padding:7px 12px; border-radius:8px; cursor:pointer; transition:border-color .15s, color .15s;
+  }
+  .icon-btn:hover{ color:var(--text); border-color:var(--text-muted); }
+
+  main#chat-main{ flex:1; overflow-y:auto; padding:32px 0 16px; }
+  .chat-inner{ max-width:720px; margin:0 auto; padding:0 20px; display:flex; flex-direction:column; gap:18px; min-height:100%; }
+  .empty-state{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:14px; color:var(--text-muted); }
+  .empty-state h1{ font-family:'Fraunces',serif; font-weight:600; font-size:28px; color:var(--text); margin:0; }
+  .empty-state p{ margin:0; font-size:14px; max-width:380px; line-height:1.6; }
+  .empty-state .infinity-mark{ width:64px; height:32px; margin-bottom:6px; }
+
+  .row{ display:flex; width:100%; }
+  .row.user{ justify-content:flex-end; }
+  .row.assistant{ justify-content:flex-start; }
+  .bubble{ max-width:78%; padding:12px 16px; border-radius:14px; font-size:15px; line-height:1.55; white-space:pre-wrap; word-wrap:break-word; }
+  .row.user .bubble{ background:var(--user-bubble); border:1px solid var(--border); border-bottom-right-radius:4px; }
+  .row.assistant .bubble{ background:var(--assistant-bubble); border:1px solid var(--border); border-bottom-left-radius:4px; }
+  .sender-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; display:block; }
+  .row.user .sender-label{ text-align:right; }
+  .typing{ display:inline-flex; gap:4px; align-items:center; padding:4px 0; }
+  .typing span{ width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:0.4; animation:pulse 1.2s infinite ease-in-out; }
+  .typing span:nth-child(2){ animation-delay:0.2s; }
+  .typing span:nth-child(3){ animation-delay:0.4s; }
+  @keyframes pulse{ 0%,80%,100%{ opacity:0.25; transform:scale(0.85); } 40%{ opacity:1; transform:scale(1); } }
+  .error-text{ color:var(--danger); font-size:13px; font-family:'JetBrains Mono',monospace; }
+
+  .input-bar-wrap{ flex-shrink:0; border-top:1px solid var(--border); background:var(--bg); padding:14px 20px 18px; }
+  .input-bar{
+    max-width:720px; margin:0 auto; display:flex; align-items:flex-end; gap:10px;
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; padding:10px 10px 10px 16px; transition:border-color .15s;
+  }
+  .input-bar:focus-within{ border-color:var(--accent-dim); }
+  textarea#composer{
+    flex:1; background:transparent; border:none; outline:none; resize:none; color:var(--text);
+    font-family:'Inter',sans-serif; font-size:15px; line-height:1.5; max-height:160px; padding:6px 0;
+  }
+  textarea#composer::placeholder{ color:var(--text-muted); }
+  .infinity-loop{ width:30px; height:18px; flex-shrink:0; margin-bottom:8px; }
+  .infinity-loop path{ fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linecap:round; stroke-dasharray:6 4; animation:flow 2.4s linear infinite; }
+  @keyframes flow{ to{ stroke-dashoffset:-40; } }
+  #send-btn{
+    flex-shrink:0; background:var(--accent); color:#1A1306; border:none; border-radius:10px; width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s, transform .1s;
+  }
+  #send-btn:hover{ background:#FFC15C; }
+  #send-btn:active{ transform:scale(0.94); }
+  #send-btn:disabled{ background:var(--border); cursor:not-allowed; }
+  .footnote{ text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px; font-family:'JetBrains Mono',monospace; }
+
+  @media (prefers-reduced-motion: reduce){ .typing span, .infinity-loop path{ animation:none; } }
+  @media (max-width:760px){ .pricing-grid, .security-grid{ grid-template-columns:1fr; } .hero{ padding:60px 20px 40px; } }
+  @media (max-width:560px){
+    .topnav{ padding:14px 16px; } .nav-links{ display:none; } .wordmark{ font-size:18px; } .badge{ display:none; }
+    #chat-main{ padding:20px 0 8px; } .bubble{ max-width:88%; font-size:14.5px; } .input-bar-wrap{ padding:10px 12px 14px; } section{ padding:48px 18px; }
+  }
+  main::-webkit-scrollbar, #chat-main::-webkit-scrollbar{ width:8px; }
+  main::-webkit-scrollbar-thumb, #chat-main::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
+</style>
+</head>
+<body>
+
+<div id="view-landing">
+  <nav class="topnav">
+    <div class="brand">
+      <div class="wordmark" onclick="goTo('landing')">MAX<span class="glyph">⌁</span>GPT</div>
+      <span class="powered-tag">powered by maxnaveed</span>
+    </div>
+    <div class="nav-links">
+      <a onclick="scrollToSection('pricing-section')">Pricing</a>
+      <a onclick="scrollToSection('security-section')">Privacy &amp; Security</a>
+      <button class="btn" onclick="goTo('login')">Log in</button>
+      <button class="btn btn-primary" onclick="goTo('login')">Get started</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <span class="eyebrow">premium · unlimited · made for india</span>
+    <h1>An AI that never makes you watch a <span class="accent-word">countdown</span>.</h1>
+    <p>Max GPT is a fast, capable AI assistant with straightforward pricing for the Indian market — no surprise caps, no quiet throttling.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="goTo('login')">Start chatting</button>
+      <button class="btn" onclick="scrollToSection('pricing-section')">See pricing</button>
+    </div>
+    <div class="infinity-divider">
+      <svg width="64" height="32" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 16c0-6 5-10 10-6 4 3 6 9 6 9s2 6 6 9c5 4 10 0 10-6s-5-10-10-6c-4 3-6 9-6 9s-2 6-6 9c-5 4-10 0-10-6z"/>
+      </svg>
+    </div>
+  </div>
+
+  <section class="bordered" id="pricing-section">
+    <div class="section-head">
+      <span class="eyebrow-small">pricing</span>
+      <h2>Built for the Indian market</h2>
+      <p>Simple plans, billed in rupees. Upgrade, downgrade, or cancel whenever you like.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">₹0<span class="per">/month</span></div>
+        <ul class="plan-features">
+          <li>Everyday chat for quick questions</li>
+          <li>Standard response speed</li>
+          <li>Chat history within a session</li>
+        </ul>
+        <button class="btn" onclick="goTo('login')">Continue free</button>
+      </div>
+      <div class="plan-card featured">
+        <span class="plan-tag">Most chosen</span>
+        <div class="plan-name">Plus</div>
+        <div class="plan-price">₹699<span class="per">/month</span></div>
+        <div class="plan-gst">+ 18% GST</div>
+        <ul class="plan-features">
+          <li>Faster, priority responses</li>
+          <li>Higher daily message ceiling</li>
+          <li>Longer conversation memory</li>
+          <li>Early access to new features</li>
+        </ul>
+        <button class="btn btn-primary" onclick="goTo('login')">Choose Plus</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Max</div>
+        <div class="plan-price">₹1,499<span class="per">/month</span></div>
+        <div class="plan-gst">+ 18% GST</div>
+        <ul class="plan-features">
+          <li>Unlimited daily messages</li>
+          <li>Top-priority response speed</li>
+          <li>Extended context for long chats</li>
+          <li>Direct support access</li>
+        </ul>
+        <button class="btn" onclick="goTo('login')">Choose Max</button>
+      </div>
+    </div>
+    <div class="currency-note">prices shown in INR · billed monthly · cancel anytime</div>
+  </section>
+
+  <section class="bordered" id="security-section">
+    <div class="section-head">
+      <span class="eyebrow-small">privacy &amp; security</span>
+      <h2>Built with your privacy in mind</h2>
+      <p>Here's exactly how your data is handled — plainly, with no fine print.</p>
+    </div>
+    <div class="security-grid">
+      <div class="security-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 1 1 8 0v4"/></svg>
+        </div>
+        <h3>Encrypted in transit</h3>
+        <p>Every message travels over a secure HTTPS connection between your browser and the server.</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6z"/></svg>
+        </div>
+        <h3>No stored passwords on this demo</h3>
+        <p>This preview doesn't run its own account database — nothing you type into the login screen is saved anywhere.</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <h3>Picks up where you left off</h3>
+        <p>Your chat is saved automatically so it's there next time — currently only while viewing inside Claude.ai, not yet on a separately hosted domain.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Max GPT — premium AI, priced for India.</div>
+    <div class="support-line">Support: <a class="support-email" href="mailto:maxnaveed007@gmail.com">maxnaveed007@gmail.com</a></div>
+  </footer>
+</div>
+
+<div id="view-login">
+  <div class="login-card">
+    <div class="brand brand-center">
+      <div class="wordmark">MAX<span class="glyph">⌁</span>GPT</div>
+      <span class="powered-tag">powered by maxnaveed</span>
+    </div>
+    <div class="login-sub">Log in to continue your unlimited chat</div>
+
+    <div class="field">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" onclick="enterApp()">Continue</button>
+
+    <div class="login-divider">or</div>
+    <span class="guest-link" onclick="enterApp()">Continue as guest</span>
+
+    <div class="privacy-note">
+      This is a preview build — login fields aren't connected to a real account system yet, so nothing you enter is stored or sent anywhere.
+    </div>
+    <span class="back-link" onclick="goTo('landing')">← Back to home</span>
+  </div>
+</div>
+
+<div id="view-app">
+  <header>
+    <div class="brand">
+      <div class="wordmark" onclick="goTo('landing')">MAX<span class="glyph">⌁</span>GPT</div>
+      <span class="powered-tag">powered by maxnaveed</span>
+    </div>
+    <div class="header-right">
+      <span class="badge">premium · unlimited</span>
+      <button class="icon-btn" id="new-chat" type="button">New chat</button>
+      <button class="icon-btn" onclick="goTo('landing')" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main id="chat-main">
+    <div class="chat-inner" id="chat-inner">
+      <div class="empty-state" id="empty-state">
+        <svg class="infinity-mark" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 16c0-6 5-10 10-6 4 3 6 9 6 9s2 6 6 9c5 4 10 0 10-6s-5-10-10-6c-4 3-6 9-6 9s-2 6-6 9c-5 4-10 0-10-6z"
+                fill="none" stroke="#F2A93B" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <h1>No quota. No countdown.</h1>
+        <p>Say whatever's on your mind — Max GPT doesn't ration the conversation. Type below to start.</p>
+      </div>
+    </div>
+  </main>
+
+  <div class="input-bar-wrap">
+    <div class="input-bar">
+      <textarea id="composer" rows="1" placeholder="Message Max GPT…" aria-label="Message Max GPT"></textarea>
+      <svg class="infinity-loop" viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 9c0-3 2.5-5 5-3 2 1.5 3 4.5 3 4.5s1 3 3 4.5c2.5 2 5 0 5-3s-2.5-5-5-3c-2 1.5-3 4.5-3 4.5s-1 3-3 4.5c-2.5 2-5 0-5-3z"/>
+      </svg>
+      <button id="send-btn" type="button" aria-label="Send message">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
+    </div>
+    <div class="footnote">your conversation saves automatically · powered by maxnaveed</div>
+  </div>
+</div>
+
+<script>
+  function goTo(view){
+    document.getElementById('view-landing').style.display = view === 'landing' ? 'block' : 'none';
+    document.getElementById('view-login').style.display = view === 'login' ? 'flex' : 'none';
+    document.getElementById('view-app').style.display = view === 'app' ? 'flex' : 'none';
+    window.scrollTo(0,0);
+    if(view === 'app'){ document.getElementById('composer').focus(); }
+  }
+  function scrollToSection(id){
+    goTo('landing');
+    setTimeout(() => { document.getElementById(id).scrollIntoView({ behavior:'smooth' }); }, 0);
+  }
+
+  async function enterApp(){
+    goTo('app');
+    await loadHistory();
+  }
+
+  const chatInner = document.getElementById('chat-inner');
+  const emptyState = document.getElementById('empty-state');
+  const composer = document.getElementById('composer');
+  const sendBtn = document.getElementById('send-btn');
+  const newChatBtn = document.getElementById('new-chat');
+  const chatMain = document.getElementById('chat-main');
+
+  let history = [];
+  let isStreaming = false;
+
+  function scrollToBottom(){ chatMain.scrollTop = chatMain.scrollHeight; }
+  function clearEmptyState(){ if(emptyState && emptyState.parentNode){ emptyState.remove(); } }
+
+  async function loadHistory(){
+    try{
+      const result = await window.storage.get('chat-history', false);
+      if(result && result.value){
+        const saved = JSON.parse(result.value);
+        if(Array.isArray(saved) && saved.length){
+          history = saved;
+          chatInner.innerHTML = '';
+          saved.forEach(m => addBubble(m.role, m.content));
+        }
+      }
+    }catch(err){
+      // nothing saved yet, or storage unavailable on this host — start fresh
+    }
+  }
+
+  async function saveHistory(){
+    try{
+      await window.storage.set('chat-history', JSON.stringify(history), false);
+    }catch(err){
+      // saving failed silently — chat still works, it just won't persist
+    }
+  }
+
+  function addBubble(role, text){
+    clearEmptyState();
+    const row = document.createElement('div');
+    row.className = 'row ' + role;
+    const wrap = document.createElement('div');
+    const label = document.createElement('span');
+    label.className = 'sender-label';
+    label.textContent = role === 'user' ? 'you' : 'max gpt';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    wrap.appendChild(label);
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    chatInner.appendChild(row);
+    scrollToBottom();
+    return bubble;
+  }
+
+  function addTypingIndicator(){
+    clearEmptyState();
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    row.id = 'typing-row';
+    const wrap = document.createElement('div');
+    const label = document.createElement('span');
+    label.className = 'sender-label';
+    label.textContent = 'max gpt';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = '<span class="typing"><span></span><span></span><span></span></span>';
+    wrap.appendChild(label);
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    chatInner.appendChild(row);
+    scrollToBottom();
+  }
+  function removeTypingIndicator(){
+    const row = document.getElementById('typing-row');
+    if(row) row.remove();
+  }
+  function addErrorBubble(message){
+    clearEmptyState();
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    const wrap = document.createElement('div');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = '<span class="error-text">' + message + '</span>';
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    chatInner.appendChild(row);
+    scrollToBottom();
+  }
+
+  async function sendMessage(){
+    const text = composer.value.trim();
+    if(!text || isStreaming) return;
+    isStreaming = true;
+    sendBtn.disabled = true;
+    composer.value = '';
+    composer.style.height = 'auto';
+    addBubble('user', text);
+    history.push({ role: 'user', content: text });
+    addTypingIndicator();
+    try{
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: 'You are Max GPT, a friendly and capable AI assistant. Be direct, warm, and helpful.',
+          messages: history
+        })
+      });
+      const data = await response.json();
+      removeTypingIndicator();
+      const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+      const replyText = textBlocks.join('\n').trim();
+      if(replyText){
+        addBubble('assistant', replyText);
+        history.push({ role: 'assistant', content: replyText });
+        await saveHistory();
+      } else {
+        addErrorBubble('No response came back. Try sending that again.');
+      }
+    } catch(err){
+      removeTypingIndicator();
+      addErrorBubble('Something went wrong reaching Max GPT. Check your connection and try again.');
+    } finally {
+      isStreaming = false;
+      sendBtn.disabled = false;
+      composer.focus();
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  composer.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
+  });
+  composer.addEventListener('input', () => {
+    composer.style.height = 'auto';
+    composer.style.height = Math.min(composer.scrollHeight, 160) + 'px';
+  });
+  newChatBtn.addEventListener('click', async () => {
+    history = [];
+    chatInner.innerHTML = '';
+    chatInner.appendChild(emptyState);
+    composer.value = '';
+    composer.style.height = 'auto';
+    try{ await window.storage.delete('chat-history', false); }catch(err){ /* nothing to delete */ }
+    composer.focus();
+  });
+</script>
+
+</body>
+</html>
