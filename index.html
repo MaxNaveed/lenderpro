@@ -3,746 +3,566 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lender Email Data · Max v0.1</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Max GPT — premium, unlimited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0b0f0b;--surface:#111611;--surface2:#161e16;--surface3:#1c261c;
-  --border:#1e2e1e;--border2:#2a3e2a;
-  --green:#39ff14;--green2:#2ecc40;--green3:#1a7a0a;
-  --green-l:rgba(57,255,20,.08);--green-ll:rgba(57,255,20,.15);
-  --amber:#f0a500;--amber-l:rgba(240,165,0,.1);
-  --red:#ff3333;--red-l:rgba(255,51,51,.1);
-  --blue:#00cfff;--blue-l:rgba(0,207,255,.08);
-  --text:#c8e6c8;--text2:#6b8f6b;--muted:#3a5a3a;
-  --sh:0 1px 4px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.4);
-  --sh2:0 8px 40px rgba(0,0,0,.6);--sh3:0 24px 64px rgba(0,0,0,.8);
-  --r:8px;--font:'DM Sans',sans-serif;
-  --display:'Rajdhani',sans-serif;--mono:'Share Tech Mono',monospace;
-  --orb:'Orbitron',sans-serif;
-  --grad:linear-gradient(135deg,#39ff14,#2ecc40);
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:14px}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(57,255,20,.015) 2px,rgba(57,255,20,.015) 4px);pointer-events:none;z-index:0}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--red3);border-radius:99px}
-.layout{display:flex;min-height:100vh;position:relative;z-index:1}
+  :root{
+    --bg:#11141A;
+    --bg-elevated:#181C24;
+    --bg-raised:#1F2430;
+    --accent:#F2A93B;
+    --accent-dim:#B9822A;
+    --text:#F2EFE6;
+    --text-muted:#8B9099;
+    --user-bubble:#1E2630;
+    --assistant-bubble:#1A1D24;
+    --border:#262B33;
+    --danger:#D9694F;
+    --success:#6FAE8C;
+  }
 
-/* SIDEBAR */
-.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;box-shadow:4px 0 24px rgba(0,0,0,.5)}
-.sb-head{padding:20px 16px 16px;border-bottom:1px solid var(--border2)}
-.sb-brand{display:flex;flex-direction:column;gap:3px}
-.sb-logo-row{display:flex;align-items:center;gap:10px}
-.sb-icon{width:32px;height:32px;background:var(--surface2);border:1px solid var(--green3);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--green);font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0;box-shadow:0 0 12px rgba(57,255,20,.2),inset 0 0 8px rgba(57,255,20,.05)}
-.sb-title{font-family:var(--display);font-size:13px;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase}
-.sb-version{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:2px}
-.nav{padding:10px 8px;flex:1;overflow-y:auto}
-.nav-group{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:12px 8px 4px;font-family:var(--mono)}
-.nitem{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;cursor:pointer;color:var(--text2);font-size:12px;font-weight:500;transition:all .15s;margin-bottom:1px;user-select:none;font-family:var(--display);letter-spacing:.5px}
-.nitem:hover{background:var(--green-l);color:var(--green)}
-.nitem.on{background:var(--green-l);color:var(--green);border-left:2px solid var(--green);box-shadow:inset 0 0 12px rgba(57,255,20,.05)}
-.ni-ico{font-size:13px;width:18px;text-align:center;flex-shrink:0}
-.nbadge{background:rgba(57,255,20,.1);color:var(--green);border-radius:3px;font-size:10px;font-weight:700;padding:1px 6px;margin-left:auto;border:1px solid var(--green3);font-family:var(--mono)}
-.sb-foot{padding:12px 14px;border-top:1px solid var(--border2);font-size:10px;color:var(--muted);line-height:1.8;font-family:var(--mono)}
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+  }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
 
-/* MAIN */
-.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{background:var(--surface);border-bottom:1px solid var(--border2);padding:0 26px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;box-shadow:0 2px 16px rgba(0,0,0,.4)}
-.page-title{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green)}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.cloud-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;background:var(--green-l);color:var(--green);border:1px solid var(--green3);transition:all .3s}
-.cloud-pill.saving{background:var(--amber-l);color:var(--amber);border-color:rgba(240,165,0,.3)}
-.cloud-pill.err{background:var(--red-l);color:var(--red);border-color:rgba(255,51,51,.3)}
-.cloud-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.saved-flash{font-family:var(--mono);font-size:10px;color:var(--green);opacity:0;transition:opacity .3s}
-.saved-flash.on{opacity:1}
-.content{padding:20px 24px 80px;flex:1}
-.panel{display:none}.panel.active{display:block}
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(242,169,59,0.05), transparent);
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(8px);
+  }
+  .wordmark{
+    font-family:'Fraunces',serif; font-weight:800; font-size:21px; letter-spacing:-0.01em;
+    display:flex; align-items:baseline; gap:6px; cursor:pointer; user-select:none;
+  }
+  .wordmark .glyph{ color:var(--accent); font-weight:600; }
+  .brand{ display:flex; flex-direction:column; gap:2px; }
+  .brand-center{ align-items:center; }
+  .powered-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.04em;
+    color:var(--text-muted); text-transform:lowercase;
+  }
+  .nav-links{ display:flex; align-items:center; gap:26px; }
+  .nav-links a{ font-size:14px; color:var(--text-muted); text-decoration:none; cursor:pointer; transition:color .15s; }
+  .nav-links a:hover{ color:var(--text); }
+  .btn{
+    font-size:14px; font-weight:600; border-radius:10px; padding:9px 16px; cursor:pointer;
+    border:1px solid var(--border); background:transparent; color:var(--text);
+    transition:border-color .15s, background .15s, transform .1s;
+  }
+  .btn:hover{ border-color:var(--text-muted); }
+  .btn:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--accent); border:none; color:#1A1306; }
+  .btn-primary:hover{ background:#FFC15C; }
+  .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:6px;font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-transform:uppercase}
-.btn-green{background:transparent;color:var(--green);border:1px solid var(--green);box-shadow:0 0 8px rgba(57,255,20,.2)}
-.btn-green:hover{background:var(--green-l);box-shadow:0 0 16px rgba(57,255,20,.3);transform:translateY(-1px)}
-.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border2)}
-.btn-outline:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
-.btn-ghost{background:transparent;color:var(--text2);padding:4px 8px;border:none}
-.btn-ghost:hover{color:var(--green)}
-.btn-red{background:var(--red-l);color:var(--red);border:1px solid rgba(255,51,51,.3)}.btn-red:hover{background:rgba(255,51,51,.2)}
-.btn-amber{background:var(--amber-l);color:var(--amber);border:1px solid rgba(240,165,0,.3)}
-.btn-sm{padding:4px 10px;font-size:11px;border-radius:5px}
-.btn-xs{padding:3px 7px;font-size:10px;border-radius:4px}
-.btn-gmail{background:linear-gradient(135deg,#ea4335,#c5221f);color:#fff;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:var(--display);white-space:nowrap;transition:all .15s;letter-spacing:.5px}
-.btn-gmail:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(234,67,53,.4)}
+  #view-landing{ display:block; }
+  .hero{ max-width:760px; margin:0 auto; padding:90px 24px 60px; text-align:center; }
+  .hero .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--accent); border:1px solid var(--accent-dim); background:rgba(242,169,59,0.08);
+    padding:6px 14px; border-radius:100px; display:inline-block; margin-bottom:22px;
+  }
+  .hero h1{ font-family:'Fraunces',serif; font-weight:700; font-size:clamp(34px,5vw,54px); line-height:1.1; margin:0 0 18px; }
+  .hero h1 .accent-word{ color:var(--accent); }
+  .hero p{ font-size:16px; color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto 32px; }
+  .hero .hero-actions{ display:flex; gap:12px; justify-content:center; }
+  .hero .hero-actions .btn{ padding:12px 22px; font-size:15px; }
+  .infinity-divider{ display:flex; justify-content:center; margin:8px 0 0; }
+  .infinity-divider svg path{ fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linecap:round; }
 
-/* HERO */
-.hero{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(57,255,20,.04) 0%,transparent 60%)}
-.hero::after{content:'';position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(57,255,20,.06) 0%,transparent 70%);pointer-events:none}
-.hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;position:relative}
-.hero-label{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
-.hero-title{font-family:var(--orb);font-size:18px;font-weight:700;color:var(--green);letter-spacing:-0px;line-height:1.2;text-shadow:0 0 20px rgba(57,255,20,.3)}
-.hero-sub{font-size:11px;color:var(--text2);margin-top:4px;font-family:var(--mono)}
-.hstat-v{font-family:var(--orb);font-size:24px;font-weight:700;color:var(--green);text-align:right;text-shadow:0 0 16px rgba(57,255,20,.4)}
-.hstat-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;text-align:right;font-family:var(--mono)}
-.search-bar{display:flex;gap:8px;position:relative}
-.srch-inp{flex:1;background:var(--surface2);border:1px solid var(--border2);color:var(--green);font-family:var(--mono);font-size:16px;font-weight:600;padding:12px 16px;border-radius:6px;outline:none;transition:all .2s;letter-spacing:3px}
-.srch-inp::placeholder{color:var(--muted);letter-spacing:1px;font-size:12px;font-family:var(--mono)}
-.srch-inp:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(57,255,20,.1),0 0 16px rgba(57,255,20,.1)}
-.srch-btn{background:var(--green);color:#0b0f0b;border:none;font-family:var(--orb);font-size:12px;font-weight:700;padding:12px 24px;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;flex-shrink:0;letter-spacing:1px;box-shadow:0 0 16px rgba(57,255,20,.3)}
-.srch-btn:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(57,255,20,.5)}
-.chips-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-.chip{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;cursor:pointer;transition:all .15s;letter-spacing:.8px;user-select:none}
-.chip:hover{border-color:var(--green);color:var(--green);background:var(--green-l)}
+  section{ max-width:980px; margin:0 auto; padding:64px 24px; }
+  section.bordered{ border-top:1px solid var(--border); }
+  .section-head{ margin-bottom:36px; text-align:center; }
+  .section-head .eyebrow-small{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--text-muted); margin-bottom:8px; display:block;
+  }
+  .section-head h2{ font-family:'Fraunces',serif; font-weight:600; font-size:30px; margin:0 0 10px; }
+  .section-head p{ color:var(--text-muted); font-size:15px; max-width:480px; margin:0 auto; }
 
-/* DUPE */
-.dupe-warn{background:var(--amber-l);border:1px solid rgba(240,165,0,.3);border-left:3px solid var(--amber);border-radius:6px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:var(--amber);display:flex;align-items:center;gap:7px;font-family:var(--mono)}
+  .pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .plan-card{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px;
+    padding:28px 24px; display:flex; flex-direction:column; gap:18px; position:relative;
+  }
+  .plan-card.featured{ border-color:var(--accent-dim); background:linear-gradient(160deg, rgba(242,169,59,0.08), var(--bg-elevated)); }
+  .plan-tag{
+    position:absolute; top:-12px; right:24px; font-family:'JetBrains Mono',monospace;
+    font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+    background:var(--accent); color:#1A1306; padding:4px 10px; border-radius:100px;
+  }
+  .plan-name{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); }
+  .plan-price{ font-family:'Fraunces',serif; font-size:36px; font-weight:700; display:flex; align-items:baseline; gap:6px; }
+  .plan-price .per{ font-family:'Inter',sans-serif; font-size:13px; color:var(--text-muted); font-weight:400; }
+  .plan-gst{ font-size:12px; color:var(--text-muted); margin-top:-12px; }
+  .plan-features{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .plan-features li{ font-size:14px; color:var(--text); display:flex; align-items:flex-start; gap:8px; }
+  .plan-features li::before{ content:'✓'; color:var(--success); font-weight:700; flex-shrink:0; }
+  .plan-card .btn{ width:100%; padding:11px; text-align:center; }
+  .currency-note{ text-align:center; font-size:12px; color:var(--text-muted); margin-top:18px; font-family:'JetBrains Mono',monospace; }
 
-/* RESULT CARDS */
-#search-results{display:flex;flex-direction:column;gap:10px}
-.rcard{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:all .2s;animation:fadeUp .2s ease both}
-.rcard:hover{border-color:var(--green3);box-shadow:var(--sh2)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.rcard-head{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.rcard-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.code-badge{background:var(--surface3);color:var(--green);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:1px;border:1px solid var(--green3);box-shadow:0 0 6px rgba(57,255,20,.1)}
-.rcard-name{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);letter-spacing:.5px}
-.note-badge{background:var(--amber-l);color:var(--amber);font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase;border:1px solid rgba(240,165,0,.3);font-family:var(--mono)}
-.rcard-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.rcard-body{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .security-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .security-card{ background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; padding:22px; }
+  .security-card .icon{ color:var(--accent); margin-bottom:12px; }
+  .security-card h3{ font-size:15px; margin:0 0 8px; font-weight:600; }
+  .security-card p{ font-size:13.5px; color:var(--text-muted); line-height:1.6; margin:0; }
 
-/* EMAIL */
-.esec-label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono)}
-.esec-line{flex:1;height:1px;background:var(--border);margin:0 7px}
-.esec-copy-all{background:var(--green-l);color:var(--green);border:1px solid var(--green3);font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;cursor:pointer;font-family:var(--mono);transition:all .15s}
-.esec-copy-all:hover{background:var(--green-ll)}
-.email-row{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:5px;margin-bottom:3px;border:1px solid transparent;background:var(--surface2);transition:all .15s}
-.email-row:hover{border-color:var(--border2)}
-.email-row.editing{border-color:var(--green);box-shadow:0 0 8px rgba(57,255,20,.1)}
-.email-display{font-family:var(--mono);font-size:11px;color:var(--green2);flex:1;cursor:text;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.email-edit-inp{font-family:var(--mono);font-size:11px;color:var(--green);flex:1;border:none;outline:none;background:transparent;min-width:0;display:none}
-.row-btns{display:flex;gap:2px;flex-shrink:0}
-.rbtn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;padding:2px 4px;border-radius:3px;transition:all .15s;line-height:1}
-.rbtn:hover{background:var(--green-l);color:var(--green)}
-.rbtn.del:hover{background:var(--red-l);color:var(--red)}
-.add-row{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;padding:5px;border-radius:4px;border:1px dashed var(--border2);transition:all .15s;width:100%;margin-top:3px;background:transparent;font-family:var(--mono)}
-.add-row:hover{border-color:var(--green);color:var(--green);background:var(--green-l)}
+  footer{ border-top:1px solid var(--border); padding:32px 24px 40px; text-align:center; color:var(--text-muted); font-size:13px; }
+  footer .support-line{ margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:12px; }
+  footer a.support-email{ color:var(--accent); text-decoration:none; }
 
-/* COMBINED */
-.combined-bar{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:var(--sh);animation:fadeUp .28s ease both}
-.cb-tag{background:var(--green);color:#0b0f0b;font-size:10px;font-weight:700;padding:3px 10px;border-radius:3px;font-family:var(--mono);letter-spacing:1px}
-.cb-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  #view-login{ display:none; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+  .login-card{ width:100%; max-width:380px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:20px; padding:36px 30px; margin:60px auto; }
+  .login-card .wordmark{ justify-content:center; display:flex; margin-bottom:6px; cursor:default; }
+  .login-card .login-sub{ text-align:center; color:var(--text-muted); font-size:13.5px; margin-bottom:28px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px; font-family:'JetBrains Mono',monospace; letter-spacing:0.03em; }
+  .field input{
+    width:100%; background:var(--bg-raised); border:1px solid var(--border); border-radius:10px;
+    padding:11px 13px; color:var(--text); font-size:14.5px; outline:none; transition:border-color .15s;
+  }
+  .field input:focus{ border-color:var(--accent-dim); }
+  .login-card .btn-primary{ width:100%; padding:12px; font-size:15px; margin-top:6px; }
+  .login-divider{ display:flex; align-items:center; gap:10px; margin:20px 0; color:var(--text-muted); font-size:12px; }
+  .login-divider::before, .login-divider::after{ content:''; flex:1; height:1px; background:var(--border); }
+  .guest-link{ display:block; text-align:center; font-size:13.5px; color:var(--text-muted); cursor:pointer; text-decoration:underline; }
+  .guest-link:hover{ color:var(--text); }
+  .privacy-note{ margin-top:22px; font-size:11.5px; color:var(--text-muted); text-align:center; line-height:1.6; }
+  .back-link{ display:block; text-align:center; margin-top:18px; font-size:13px; color:var(--text-muted); cursor:pointer; }
+  .back-link:hover{ color:var(--text); }
 
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.stat-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:16px;position:relative;overflow:hidden}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--green);opacity:.4}
-.stat-v{font-family:var(--orb);font-size:24px;font-weight:700;color:var(--green);line-height:1;margin-bottom:4px;text-shadow:0 0 10px rgba(57,255,20,.3)}
-.stat-l{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:1px}
+  #view-app{ display:none; flex-direction:column; height:100vh; overflow:hidden; }
+  #view-app header{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:1px solid var(--border); flex-shrink:0; }
+  #view-app .header-right{ display:flex; align-items:center; gap:10px; }
+  .badge{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--accent); border:1px solid var(--accent-dim); padding:5px 10px; border-radius:100px; background:rgba(242,169,59,0.08);
+  }
+  .icon-btn{
+    font-size:13px; color:var(--text-muted); background:transparent; border:1px solid var(--border);
+    padding:7px 12px; border-radius:8px; cursor:pointer; transition:border-color .15s, color .15s;
+  }
+  .icon-btn:hover{ color:var(--text); border-color:var(--text-muted); }
 
-/* TABLE */
-.tbl-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
-.tbl-hint{font-size:11px;color:var(--muted);font-family:var(--mono)}
-.tbl-wrap{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);overflow:auto}
-.etable{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
-.etable thead tr{background:var(--surface2);border-bottom:1px solid var(--border2)}
-.etable th{color:var(--muted);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 13px;text-align:left;border-right:1px solid var(--border);white-space:nowrap;font-family:var(--mono)}
-.etable th:last-child{border-right:none}
-.etable tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
-.etable tbody tr:last-child{border-bottom:none}
-.etable tbody tr:hover{background:var(--green-l)}
-.etable td{padding:8px 13px;border-right:1px solid var(--border);vertical-align:middle}
-.etable td:last-child{border-right:none}
-.cell-inp{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:11px;color:var(--text);width:100%;padding:2px 4px;border-radius:4px}
-.cell-inp:focus{background:var(--surface2);box-shadow:0 0 0 1px var(--green);color:var(--green)}
-.code-cell-inp{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green);width:100%;padding:2px 4px;border-radius:4px;min-width:50px}
-.code-cell-inp:focus{background:var(--surface2);box-shadow:0 0 0 1px var(--green)}
+  main#chat-main{ flex:1; overflow-y:auto; padding:32px 0 16px; }
+  .chat-inner{ max-width:720px; margin:0 auto; padding:0 20px; display:flex; flex-direction:column; gap:18px; min-height:100%; }
+  .empty-state{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:14px; color:var(--text-muted); }
+  .empty-state h1{ font-family:'Fraunces',serif; font-weight:600; font-size:28px; color:var(--text); margin:0; }
+  .empty-state p{ margin:0; font-size:14px; max-width:380px; line-height:1.6; }
+  .empty-state .infinity-mark{ width:64px; height:32px; margin-bottom:6px; }
 
-/* FORM */
-.form-wrap{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden}
-.form-top{padding:14px 20px;border-bottom:1px solid var(--border2);background:var(--surface2);display:flex;align-items:center;gap:10px}
-.form-top-ico{width:30px;height:30px;background:var(--green-l);border:1px solid var(--green3);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.form-top-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--green);letter-spacing:.5px}
-.form-top-sub{font-size:11px;color:var(--muted);font-family:var(--mono)}
-.form-body{padding:20px}
-.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
-.flabel{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono)}
-.finput{background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:13px;padding:8px 12px;border-radius:6px;outline:none;transition:all .2s;width:100%}
-.finput:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(57,255,20,.08);color:var(--green)}
-.finput::placeholder{color:var(--muted);font-size:12px}
-.form-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border2)}
-.fmsg{font-size:11px;font-family:var(--mono)}
+  .row{ display:flex; width:100%; }
+  .row.user{ justify-content:flex-end; }
+  .row.assistant{ justify-content:flex-start; }
+  .bubble{ max-width:78%; padding:12px 16px; border-radius:14px; font-size:15px; line-height:1.55; white-space:pre-wrap; word-wrap:break-word; }
+  .row.user .bubble{ background:var(--user-bubble); border:1px solid var(--border); border-bottom-right-radius:4px; }
+  .row.assistant .bubble{ background:var(--assistant-bubble); border:1px solid var(--border); border-bottom-left-radius:4px; }
+  .sender-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; display:block; }
+  .row.user .sender-label{ text-align:right; }
+  .typing{ display:inline-flex; gap:4px; align-items:center; padding:4px 0; }
+  .typing span{ width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:0.4; animation:pulse 1.2s infinite ease-in-out; }
+  .typing span:nth-child(2){ animation-delay:0.2s; }
+  .typing span:nth-child(3){ animation-delay:0.4s; }
+  @keyframes pulse{ 0%,80%,100%{ opacity:0.25; transform:scale(0.85); } 40%{ opacity:1; transform:scale(1); } }
+  .error-text{ color:var(--danger); font-size:13px; font-family:'JetBrains Mono',monospace; }
 
-/* ROUND ROBIN - ONE TEAM */
-.rr-team-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden}
-.rr-team-head{padding:16px 20px;border-bottom:1px solid var(--border2);background:var(--surface2);display:flex;align-items:center;justify-content:space-between}
-.rr-team-title{font-family:var(--orb);font-size:14px;font-weight:700;color:var(--green);letter-spacing:1px;text-shadow:0 0 10px rgba(57,255,20,.3)}
-.rr-team-sub{font-size:11px;color:var(--text2);font-family:var(--mono);margin-top:2px}
-.rr-roles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:1px solid var(--border2)}
-.rr-role-col{padding:16px;border-right:1px solid var(--border2)}
-.rr-role-col:last-child{border-right:none}
-.rr-role-title{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.rr-role-title.owner{color:var(--green)}
-.rr-role-title.pricing{color:var(--blue)}
-.rr-role-title.funding{color:var(--amber)}
-.rr-agent{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;margin-bottom:5px;cursor:pointer;transition:all .15s}
-.rr-agent:hover{border-color:var(--border2)}
-.rr-agent.active-turn.owner{border-color:var(--green);background:var(--green-l);box-shadow:0 0 10px rgba(57,255,20,.1)}
-.rr-agent.active-turn.pricing{border-color:var(--blue);background:var(--blue-l)}
-.rr-agent.active-turn.funding{border-color:var(--amber);background:var(--amber-l)}
-.rr-agent.active-turn .rr-aname{color:var(--green)}
-.rr-agent.active-turn.pricing .rr-aname{color:var(--blue)}
-.rr-agent.active-turn.funding .rr-aname{color:var(--amber)}
-.rr-aname{font-size:12px;font-weight:600;color:var(--text);font-family:var(--display)}
-.rr-aright{display:flex;align-items:center;gap:6px}
-.rr-cap{font-family:var(--mono);font-size:10px;color:var(--text2);background:var(--surface3);padding:1px 6px;border-radius:3px;border:1px solid var(--border2)}
-.rr-dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
-.rr-agent.active-turn.owner .rr-dot{background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 1.5s infinite}
-.rr-agent.active-turn.pricing .rr-dot{background:var(--blue);box-shadow:0 0 6px var(--blue);animation:pulse 1.5s infinite}
-.rr-agent.active-turn.funding .rr-dot{background:var(--amber);box-shadow:0 0 6px var(--amber);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.rr-add{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;padding:6px;border-radius:4px;border:1px dashed var(--border2);transition:all .15s;width:100%;margin-top:3px;background:transparent;font-family:var(--mono)}
-.rr-add:hover{border-color:var(--green);color:var(--green);background:var(--green-l)}
-.rr-team-foot{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.rr-turn-info{font-family:var(--mono);font-size:11px;color:var(--text2)}
-.rr-turn-info span{color:var(--green);font-weight:700}
+  .input-bar-wrap{ flex-shrink:0; border-top:1px solid var(--border); background:var(--bg); padding:14px 20px 18px; }
+  .input-bar{
+    max-width:720px; margin:0 auto; display:flex; align-items:flex-end; gap:10px;
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; padding:10px 10px 10px 16px; transition:border-color .15s;
+  }
+  .input-bar:focus-within{ border-color:var(--accent-dim); }
+  textarea#composer{
+    flex:1; background:transparent; border:none; outline:none; resize:none; color:var(--text);
+    font-family:'Inter',sans-serif; font-size:15px; line-height:1.5; max-height:160px; padding:6px 0;
+  }
+  textarea#composer::placeholder{ color:var(--text-muted); }
+  .infinity-loop{ width:30px; height:18px; flex-shrink:0; margin-bottom:8px; }
+  .infinity-loop path{ fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linecap:round; stroke-dasharray:6 4; animation:flow 2.4s linear infinite; }
+  @keyframes flow{ to{ stroke-dashoffset:-40; } }
+  #send-btn{
+    flex-shrink:0; background:var(--accent); color:#1A1306; border:none; border-radius:10px; width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s, transform .1s;
+  }
+  #send-btn:hover{ background:#FFC15C; }
+  #send-btn:active{ transform:scale(0.94); }
+  #send-btn:disabled{ background:var(--border); cursor:not-allowed; }
+  .footnote{ text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px; font-family:'JetBrains Mono',monospace; }
 
-/* VAULT */
-.vault-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.vault-title{font-family:var(--display);font-size:18px;font-weight:700;color:var(--green);letter-spacing:1px}
-.pwd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.pwd-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:15px;position:relative;overflow:hidden;transition:all .2s}
-.pwd-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--green);opacity:.4}
-.pwd-card:hover{border-color:var(--green3)}
-.pwd-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:11px}
-.pwd-name{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);letter-spacing:.5px}
-.pwd-cat{font-size:9px;font-weight:700;background:var(--green-l);color:var(--green);padding:2px 7px;border-radius:3px;border:1px solid var(--green3);font-family:var(--mono);letter-spacing:1px}
-.pwd-row{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 9px;margin-bottom:4px}
-.pwd-lbl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;width:48px;flex-shrink:0;font-family:var(--mono)}
-.pwd-val{font-family:var(--mono);font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pwd-val.masked{letter-spacing:3px;color:var(--muted)}
-.pwd-acts{display:flex;gap:2px;flex-shrink:0}
-.ibt{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:2px 4px;border-radius:3px;transition:all .15s}
-.ibt:hover{color:var(--green)}
-.pwd-url{display:block;font-family:var(--mono);font-size:10px;color:var(--green2);text-decoration:none;padding:5px 9px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pwd-url:hover{border-color:var(--green)}
-.pwd-foot{display:flex;gap:5px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border)}
-
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:24px;width:460px;max-width:94vw;box-shadow:var(--sh3);animation:modalPop .2s ease}
-@keyframes modalPop{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
-.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.modal-title{font-family:var(--display);font-size:15px;font-weight:700;color:var(--green);letter-spacing:.5px}
-.modal-x{background:transparent;border:none;font-size:14px;cursor:pointer;color:var(--muted);padding:3px 7px;border-radius:4px;transition:all .15s}
-.modal-x:hover{background:var(--red-l);color:var(--red)}
-.modal-body{display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
-.modal-footer{display:flex;gap:7px;justify-content:flex-end}
-
-/* ═══ LOGIN - COD GHOST THEME ═══ */
-.login-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.login-screen.hidden{display:none}
-.login-bg{position:absolute;inset:0;background:#0a0c0a}
-.login-bg::before{content:'';position:absolute;inset:0;background:
-  radial-gradient(ellipse at 20% 80%,rgba(57,255,20,.06) 0%,transparent 50%),
-  radial-gradient(ellipse at 80% 20%,rgba(0,207,255,.04) 0%,transparent 50%),
-  radial-gradient(ellipse at 50% 50%,rgba(57,255,20,.03) 0%,transparent 70%)}
-.login-bg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(57,255,20,.012) 3px,rgba(57,255,20,.012) 4px)}
-/* Ghost silhouette */
-.ghost-silhouette{position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:520px;height:520px;opacity:.04;font-size:460px;line-height:1;pointer-events:none;filter:blur(2px);color:#fff;font-family:serif;user-select:none}
-/* HUD elements */
-.hud-corner{position:absolute;width:60px;height:60px;opacity:.3}
-.hud-tl{top:20px;left:20px;border-top:1px solid var(--green);border-left:1px solid var(--green)}
-.hud-tr{top:20px;right:20px;border-top:1px solid var(--green);border-right:1px solid var(--green)}
-.hud-bl{bottom:20px;left:20px;border-bottom:1px solid var(--green);border-left:1px solid var(--green)}
-.hud-br{bottom:20px;right:20px;border-bottom:1px solid var(--green);border-right:1px solid var(--green)}
-.hud-line-h{position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(57,255,20,.06),transparent);pointer-events:none}
-.hud-scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,rgba(57,255,20,.3),transparent);animation:scan 4s linear infinite;pointer-events:none}
-@keyframes scan{0%{top:0;opacity:1}90%{opacity:.3}100%{top:100%;opacity:0}}
-/* Login card */
-.login-card{position:relative;z-index:2;background:rgba(10,16,10,.92);border:1px solid rgba(57,255,20,.2);border-radius:4px;padding:40px 36px;width:400px;max-width:92vw;box-shadow:0 0 60px rgba(57,255,20,.08),0 0 120px rgba(0,0,0,.8),inset 0 0 40px rgba(57,255,20,.02);backdrop-filter:blur(20px)}
-.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(57,255,20,.4),transparent)}
-.login-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(57,255,20,.2),transparent)}
-/* Corner brackets on card */
-.card-corner{position:absolute;width:14px;height:14px}
-.card-corner.tl{top:-1px;left:-1px;border-top:2px solid var(--green);border-left:2px solid var(--green)}
-.card-corner.tr{top:-1px;right:-1px;border-top:2px solid var(--green);border-right:2px solid var(--green)}
-.card-corner.bl{bottom:-1px;left:-1px;border-bottom:2px solid var(--green);border-left:2px solid var(--green)}
-.card-corner.br{bottom:-1px;right:-1px;border-bottom:2px solid var(--green);border-right:2px solid var(--green)}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-ghost-ico{width:64px;height:64px;margin:0 auto 12px;position:relative}
-.login-ghost-ico::before{content:'👤';font-size:48px;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;filter:grayscale(1) brightness(.4)}
-.login-ghost-ico::after{content:'';position:absolute;inset:-4px;border:1px solid rgba(57,255,20,.3);border-radius:50%;box-shadow:0 0 20px rgba(57,255,20,.1)}
-.login-callsign{font-family:var(--orb);font-size:11px;font-weight:700;color:var(--green);letter-spacing:4px;text-transform:uppercase;margin-bottom:2px;text-shadow:0 0 10px rgba(57,255,20,.5)}
-.login-name{font-family:var(--orb);font-size:16px;font-weight:800;color:#e8f5e8;letter-spacing:1px;margin-bottom:2px}
-.login-ver{font-family:var(--mono);font-size:9px;color:rgba(57,255,20,.4);letter-spacing:3px;text-transform:uppercase}
-.login-divider{height:1px;background:linear-gradient(to right,transparent,rgba(57,255,20,.2),transparent);margin:20px 0}
-.login-status{font-family:var(--mono);font-size:9px;color:rgba(57,255,20,.5);letter-spacing:2px;text-align:center;margin-bottom:20px;text-transform:uppercase}
-.login-status::before{content:'▶ '}
-.lfield{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.llabel{font-size:9px;font-weight:700;color:rgba(57,255,20,.5);letter-spacing:2px;text-transform:uppercase;font-family:var(--mono)}
-.lpwrap{position:relative;display:flex;align-items:center}
-.linput{background:rgba(57,255,20,.04);border:1px solid rgba(57,255,20,.2);color:var(--green);font-family:var(--mono);font-size:13px;padding:10px 38px 10px 12px;border-radius:3px;outline:none;transition:all .2s;width:100%;letter-spacing:1px}
-.linput:focus{border-color:rgba(57,255,20,.6);box-shadow:0 0 0 1px rgba(57,255,20,.1),0 0 16px rgba(57,255,20,.08);background:rgba(57,255,20,.06)}
-.linput::placeholder{color:rgba(57,255,20,.2);letter-spacing:1px}
-.leye{position:absolute;right:10px;background:none;border:none;cursor:pointer;color:rgba(57,255,20,.4);font-size:13px;padding:3px;transition:color .15s}
-.leye:hover{color:var(--green)}
-.lbtn{width:100%;background:transparent;color:var(--green);border:1px solid rgba(57,255,20,.4);font-family:var(--orb);font-size:12px;font-weight:700;padding:12px;border-radius:3px;cursor:pointer;transition:all .2s;margin-top:6px;letter-spacing:2px;text-transform:uppercase;box-shadow:0 0 12px rgba(57,255,20,.1)}
-.lbtn:hover{background:rgba(57,255,20,.06);border-color:var(--green);box-shadow:0 0 24px rgba(57,255,20,.2);transform:translateY(-1px)}
-.lerr{background:rgba(255,51,51,.08);border:1px solid rgba(255,51,51,.3);color:var(--red);font-size:11px;padding:8px 12px;border-radius:3px;margin-top:8px;text-align:center;display:none;font-family:var(--mono);letter-spacing:.5px}
-.lerr.show{display:block}
-.forgot-link{text-align:center;margin-top:12px;background:none;border:none;color:rgba(57,255,20,.4);font-size:10px;cursor:pointer;font-family:var(--mono);display:block;letter-spacing:1px;transition:color .15s;width:100%}
-.forgot-link:hover{color:var(--green)}
-.login-footer{text-align:center;margin-top:18px;font-size:9px;color:rgba(57,255,20,.2);font-family:var(--mono);letter-spacing:2px;text-transform:uppercase}
-
-/* RESET same theme */
-.reset-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center}
-.reset-screen.hidden{display:none}
-.reset-screen .login-bg{position:absolute;inset:0;background:#0a0c0a}
-.reset-screen .login-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(57,255,20,.05) 0%,transparent 70%)}
-.reset-screen .login-bg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(57,255,20,.012) 3px,rgba(57,255,20,.012) 4px)}
-
-/* TOAST */
-.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:6px;pointer-events:none}
-.toast{background:var(--surface);color:var(--text);font-family:var(--mono);font-size:11px;padding:9px 13px 9px 9px;border-radius:4px;box-shadow:var(--sh2);display:flex;align-items:center;gap:7px;transform:translateX(130%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-width:300px;pointer-events:auto;border:1px solid var(--border2);letter-spacing:.3px}
-.toast.on{transform:translateX(0)}
-.toast.s{border-left:2px solid var(--green)}
-.toast.e{border-left:2px solid var(--red)}
-.ticon{width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.toast.s .ticon{background:var(--green-l);color:var(--green)}
-.toast.e .ticon{background:var(--red-l);color:var(--red)}
-.toast:not(.s):not(.e) .ticon{background:var(--green-l);color:var(--green)}
-
-.empty{text-align:center;padding:44px;color:var(--muted)}
-.empty-ico{font-size:32px;margin-bottom:8px;opacity:.4}
-.empty-t{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text2);margin-bottom:4px;letter-spacing:.5px}
-
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-@media(max-width:768px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.stats-grid{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr}.rcard-body{grid-template-columns:1fr}.rr-roles-grid{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion: reduce){ .typing span, .infinity-loop path{ animation:none; } }
+  @media (max-width:760px){ .pricing-grid, .security-grid{ grid-template-columns:1fr; } .hero{ padding:60px 20px 40px; } }
+  @media (max-width:560px){
+    .topnav{ padding:14px 16px; } .nav-links{ display:none; } .wordmark{ font-size:18px; } .badge{ display:none; }
+    #chat-main{ padding:20px 0 8px; } .bubble{ max-width:88%; font-size:14.5px; } .input-bar-wrap{ padding:10px 12px 14px; } section{ padding:48px 18px; }
+  }
+  main::-webkit-scrollbar, #chat-main::-webkit-scrollbar{ width:8px; }
+  main::-webkit-scrollbar-thumb, #chat-main::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
 </style>
 </head>
 <body>
 
-<!-- RESET -->
-<div class="reset-screen hidden" id="reset-screen">
-  <div class="login-bg"></div>
-  <div class="login-card" style="position:relative;z-index:2">
-    <div class="card-corner tl"></div><div class="card-corner tr"></div><div class="card-corner bl"></div><div class="card-corner br"></div>
-    <div class="login-logo">
-      <div class="login-callsign">Reset Auth</div>
-      <div class="login-name">Password Reset</div>
+<div id="view-landing">
+  <nav class="topnav">
+    <div class="brand">
+      <div class="wordmark" onclick="goTo('landing')">MAX<span class="glyph">⌁</span>GPT</div>
+      <span class="powered-tag">powered by maxnaveed</span>
     </div>
-    <div id="rst-s1">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--text2);text-align:center;margin-bottom:16px">Send code to <span style="color:var(--green)">maxnaveed007@gmail.com</span></div>
-      <button class="lbtn" style="margin-bottom:12px" onclick="sendCode()">[ Send Reset Code ]</button>
-      <div class="lfield"><label class="llabel">Enter Code</label><input class="linput" id="rst-code" placeholder="000000" onkeydown="if(event.key==='Enter')verifyCode()"></div>
-      <button class="lbtn" onclick="verifyCode()">[ Verify Code ]</button>
-      <div class="lerr" id="rst-err1">// INVALID OR EXPIRED CODE</div>
+    <div class="nav-links">
+      <a onclick="scrollToSection('pricing-section')">Pricing</a>
+      <a onclick="scrollToSection('security-section')">Privacy &amp; Security</a>
+      <button class="btn" onclick="goTo('login')">Log in</button>
+      <button class="btn btn-primary" onclick="goTo('login')">Get started</button>
     </div>
-    <div id="rst-s2" style="display:none">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--green);text-align:center;margin-bottom:16px">// CODE VERIFIED · SET NEW PASSWORD</div>
-      <div class="lfield"><label class="llabel">New Password</label><div class="lpwrap"><input class="linput" id="np1" type="password" placeholder="••••••••"><button class="leye" onclick="toggleEye('np1',this)">👁</button></div></div>
-      <div class="lfield"><label class="llabel">Confirm</label><div class="lpwrap"><input class="linput" id="np2" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')setNewPwd()"><button class="leye" onclick="toggleEye('np2',this)">👁</button></div></div>
-      <button class="lbtn" onclick="setNewPwd()">[ Set New Password ]</button>
-      <div class="lerr" id="rst-err2">// PASSWORDS DO NOT MATCH</div>
+  </nav>
+
+  <div class="hero">
+    <span class="eyebrow">premium · unlimited · made for india</span>
+    <h1>An AI that never makes you watch a <span class="accent-word">countdown</span>.</h1>
+    <p>Max GPT is a fast, capable AI assistant with straightforward pricing for the Indian market — no surprise caps, no quiet throttling.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="goTo('login')">Start chatting</button>
+      <button class="btn" onclick="scrollToSection('pricing-section')">See pricing</button>
     </div>
-    <button class="forgot-link" onclick="hideReset()">← BACK TO LOGIN</button>
+    <div class="infinity-divider">
+      <svg width="64" height="32" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 16c0-6 5-10 10-6 4 3 6 9 6 9s2 6 6 9c5 4 10 0 10-6s-5-10-10-6c-4 3-6 9-6 9s-2 6-6 9c-5 4-10 0-10-6z"/>
+      </svg>
+    </div>
   </div>
+
+  <section class="bordered" id="pricing-section">
+    <div class="section-head">
+      <span class="eyebrow-small">pricing</span>
+      <h2>Built for the Indian market</h2>
+      <p>Simple plans, billed in rupees. Upgrade, downgrade, or cancel whenever you like.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">₹0<span class="per">/month</span></div>
+        <ul class="plan-features">
+          <li>Everyday chat for quick questions</li>
+          <li>Standard response speed</li>
+          <li>Chat history within a session</li>
+        </ul>
+        <button class="btn" onclick="goTo('login')">Continue free</button>
+      </div>
+      <div class="plan-card featured">
+        <span class="plan-tag">Most chosen</span>
+        <div class="plan-name">Plus</div>
+        <div class="plan-price">₹699<span class="per">/month</span></div>
+        <div class="plan-gst">+ 18% GST</div>
+        <ul class="plan-features">
+          <li>Faster, priority responses</li>
+          <li>Higher daily message ceiling</li>
+          <li>Longer conversation memory</li>
+          <li>Early access to new features</li>
+        </ul>
+        <button class="btn btn-primary" onclick="goTo('login')">Choose Plus</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Max</div>
+        <div class="plan-price">₹1,499<span class="per">/month</span></div>
+        <div class="plan-gst">+ 18% GST</div>
+        <ul class="plan-features">
+          <li>Unlimited daily messages</li>
+          <li>Top-priority response speed</li>
+          <li>Extended context for long chats</li>
+          <li>Direct support access</li>
+        </ul>
+        <button class="btn" onclick="goTo('login')">Choose Max</button>
+      </div>
+    </div>
+    <div class="currency-note">prices shown in INR · billed monthly · cancel anytime</div>
+  </section>
+
+  <section class="bordered" id="security-section">
+    <div class="section-head">
+      <span class="eyebrow-small">privacy &amp; security</span>
+      <h2>Built with your privacy in mind</h2>
+      <p>Here's exactly how your data is handled — plainly, with no fine print.</p>
+    </div>
+    <div class="security-grid">
+      <div class="security-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 1 1 8 0v4"/></svg>
+        </div>
+        <h3>Encrypted in transit</h3>
+        <p>Every message travels over a secure HTTPS connection between your browser and the server.</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6z"/></svg>
+        </div>
+        <h3>No stored passwords on this demo</h3>
+        <p>This preview doesn't run its own account database — nothing you type into the login screen is saved anywhere.</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <h3>Picks up where you left off</h3>
+        <p>Your chat is saved automatically so it's there next time — currently only while viewing inside Claude.ai, not yet on a separately hosted domain.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Max GPT — premium AI, priced for India.</div>
+    <div class="support-line">Support: <a class="support-email" href="mailto:maxnaveed007@gmail.com">maxnaveed007@gmail.com</a></div>
+  </footer>
 </div>
 
-<!-- LOGIN -->
-<div class="login-screen" id="login-screen">
-  <div class="login-bg"></div>
-  <div class="hud-corner hud-tl"></div>
-  <div class="hud-corner hud-tr"></div>
-  <div class="hud-corner hud-bl"></div>
-  <div class="hud-corner hud-br"></div>
-  <div class="hud-line-h"></div>
-  <div class="hud-scan"></div>
-  <div class="ghost-silhouette">👤</div>
+<div id="view-login">
   <div class="login-card">
-    <div class="card-corner tl"></div><div class="card-corner tr"></div><div class="card-corner bl"></div><div class="card-corner br"></div>
-    <div class="login-logo">
-      <div class="login-ghost-ico"></div>
-      <div class="login-callsign">Callsign: LED</div>
-      <div class="login-name">Lender Email Data</div>
-      <div class="login-ver">Max · Version 0.1</div>
+    <div class="brand brand-center">
+      <div class="wordmark">MAX<span class="glyph">⌁</span>GPT</div>
+      <span class="powered-tag">powered by maxnaveed</span>
     </div>
-    <div class="login-divider"></div>
-    <div class="login-status">Authentication Required</div>
-    <div class="lfield">
-      <label class="llabel">Access Code</label>
-      <div class="lpwrap">
-        <input class="linput" id="lpwd" type="password" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-        <button class="leye" onclick="toggleLoginEye(this)">👁</button>
-      </div>
+    <div class="login-sub">Log in to continue your unlimited chat</div>
+
+    <div class="field">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
     </div>
-    <button class="lbtn" onclick="doLogin()">[ Authenticate ]</button>
-    <div class="lerr" id="lerr">// ACCESS DENIED · INCORRECT CODE</div>
-    <button class="forgot-link" onclick="showReset()">FORGOT ACCESS CODE?</button>
-    <div class="login-footer">LED · Max v0.1 · Encrypted · Cloud Sync</div>
+    <div class="field">
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" onclick="enterApp()">Continue</button>
+
+    <div class="login-divider">or</div>
+    <span class="guest-link" onclick="enterApp()">Continue as guest</span>
+
+    <div class="privacy-note">
+      This is a preview build — login fields aren't connected to a real account system yet, so nothing you enter is stored or sent anywhere.
+    </div>
+    <span class="back-link" onclick="goTo('landing')">← Back to home</span>
   </div>
 </div>
 
-<!-- APP -->
-<div class="layout">
-  <aside class="sidebar">
-    <div class="sb-head">
-      <div class="sb-brand">
-        <div class="sb-logo-row">
-          <div class="sb-icon">LED</div>
-          <div class="sb-title">Lender Email Data</div>
-        </div>
-        <div class="sb-version">Max · v0.1</div>
+<div id="view-app">
+  <header>
+    <div class="brand">
+      <div class="wordmark" onclick="goTo('landing')">MAX<span class="glyph">⌁</span>GPT</div>
+      <span class="powered-tag">powered by maxnaveed</span>
+    </div>
+    <div class="header-right">
+      <span class="badge">premium · unlimited</span>
+      <button class="icon-btn" id="new-chat" type="button">New chat</button>
+      <button class="icon-btn" onclick="goTo('landing')" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main id="chat-main">
+    <div class="chat-inner" id="chat-inner">
+      <div class="empty-state" id="empty-state">
+        <svg class="infinity-mark" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 16c0-6 5-10 10-6 4 3 6 9 6 9s2 6 6 9c5 4 10 0 10-6s-5-10-10-6c-4 3-6 9-6 9s-2 6-6 9c-5 4-10 0-10-6z"
+                fill="none" stroke="#F2A93B" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <h1>No quota. No countdown.</h1>
+        <p>Say whatever's on your mind — Max GPT doesn't ration the conversation. Type below to start.</p>
       </div>
     </div>
-    <nav class="nav">
-      <div class="nav-group">Main</div>
-      <div class="nitem on" onclick="goNav('search',this)"><span class="ni-ico">🔍</span>Search</div>
-      <div class="nitem" onclick="goNav('directory',this)"><span class="ni-ico">📋</span>Directory<span class="nbadge" id="nav-cnt">0</span></div>
-      <div class="nav-group">Tools</div>
-      <div class="nitem" onclick="goNav('roundrobin',this)"><span class="ni-ico">🔄</span>Round Robin</div>
-      <div class="nitem" onclick="goNav('vault',this)"><span class="ni-ico">🔐</span>Vault<span class="nbadge" id="nav-pwd">0</span></div>
-      <div class="nav-group">Manage</div>
-      <div class="nitem" onclick="goNav('add',this)"><span class="ni-ico">➕</span>Add Lender</div>
-      <div class="nitem" onclick="exportCSV()"><span class="ni-ico">📥</span>Export CSV</div>
-      <div class="nitem" onclick="doLogout()"><span class="ni-ico">🚪</span>Logout</div>
-    </nav>
-    <div class="sb-foot"><span style="color:rgba(57,255,20,.6)" id="sb-cnt">0</span> lenders · <span style="color:rgba(57,255,20,.6)" id="sb-pwd">0</span> passwords<br>auto-saved · cloud synced</div>
-  </aside>
+  </main>
 
-  <div class="main">
-    <div class="topbar">
-      <div class="page-title" id="page-title">Search Lenders</div>
-      <div class="topbar-right">
-        <div class="saved-flash" id="saved-flash">// SAVED</div>
-        <div class="cloud-pill" id="cloud-pill"><div class="cloud-dot"></div><span id="cloud-txt">SYNCED</span></div>
-        <button class="btn btn-outline btn-sm" onclick="exportCSV()">⬇ CSV</button>
-      </div>
+  <div class="input-bar-wrap">
+    <div class="input-bar">
+      <textarea id="composer" rows="1" placeholder="Message Max GPT…" aria-label="Message Max GPT"></textarea>
+      <svg class="infinity-loop" viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 9c0-3 2.5-5 5-3 2 1.5 3 4.5 3 4.5s1 3 3 4.5c2.5 2 5 0 5-3s-2.5-5-5-3c-2 1.5-3 4.5-3 4.5s-1 3-3 4.5c-2.5 2-5 0-5-3z"/>
+      </svg>
+      <button id="send-btn" type="button" aria-label="Send message">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
     </div>
-
-    <div class="content">
-
-      <!-- SEARCH -->
-      <div class="panel active" id="panel-search">
-        <div class="hero">
-          <div class="hero-top">
-            <div>
-              <div class="hero-label">// Lender Lookup System</div>
-              <div class="hero-title">Email Directory</div>
-              <div class="hero-sub">Enter lender codes · each opens its own Gmail compose window</div>
-            </div>
-            <div><div class="hstat-v" id="h-lenders">0</div><div class="hstat-l">Lenders</div></div>
-          </div>
-          <div class="search-bar">
-            <input class="srch-inp" id="srch" placeholder="FF  VOX  LF  LF  1R …" onkeydown="if(event.key==='Enter')doSearch()" autocomplete="off" spellcheck="false">
-            <button class="srch-btn" onclick="doSearch()">SEARCH</button>
-          </div>
-          <div class="chips-row" id="chips"></div>
-        </div>
-        <div id="search-results"></div>
-      </div>
-
-      <!-- DIRECTORY -->
-      <div class="panel" id="panel-directory">
-        <div class="stats-grid" id="stats-grid"></div>
-        <div class="tbl-toolbar">
-          <div class="tbl-hint">// Click cell to edit · Code column editable · saves instantly</div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-outline btn-sm" onclick="goNav('add',null)">+ ADD</button>
-            <button class="btn btn-green btn-sm" onclick="exportCSV()">📥 CSV</button>
-          </div>
-        </div>
-        <div class="tbl-wrap">
-          <table class="etable">
-            <thead><tr><th style="width:34px">#</th><th style="width:80px">CODE</th><th style="width:160px">NAME</th><th>TO EMAILS</th><th>CC EMAILS</th><th style="width:100px">NOTES</th><th style="width:70px">ACT</th></tr></thead>
-            <tbody id="tbl-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ROUND ROBIN - ONE TEAM -->
-      <div class="panel" id="panel-roundrobin">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-          <div>
-            <div style="font-family:var(--orb);font-size:15px;font-weight:700;color:var(--green);letter-spacing:1px;margin-bottom:3px">Team Round Robin</div>
-            <div style="font-size:11px;color:var(--text2);font-family:var(--mono)">// One team · three roles · click agent to set current turn</div>
-          </div>
-          <button class="btn btn-green btn-sm" onclick="saveRR()">💾 SAVE</button>
-        </div>
-        <div class="rr-team-card">
-          <div class="rr-team-head">
-            <div>
-              <div class="rr-team-title">Team Alpha</div>
-              <div class="rr-team-sub">// Owner · Pricing Manager · Funding Coordinator</div>
-            </div>
-            <div style="display:flex;gap:6px" id="rr-next-all"></div>
-          </div>
-          <div class="rr-roles-grid" id="rr-roles-grid"></div>
-          <div class="rr-team-foot">
-            <div class="rr-turn-info" id="rr-turn-info">Ready</div>
-            <div style="display:flex;gap:6px">
-              <button class="btn btn-outline btn-xs" onclick="nextTurn('owner')">Owner Next →</button>
-              <button class="btn btn-outline btn-xs" onclick="nextTurn('pricing')">Pricing Next →</button>
-              <button class="btn btn-outline btn-xs" onclick="nextTurn('funding')">Funding Next →</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- VAULT -->
-      <div class="panel" id="panel-vault">
-        <div class="vault-hd"><div class="vault-title">// Password Vault</div><button class="btn btn-green" onclick="openPwdModal()">+ ADD ENTRY</button></div>
-        <div class="pwd-grid" id="pwd-grid"><div class="empty"><div class="empty-ico">🔒</div><div class="empty-t">Vault Empty</div></div></div>
-      </div>
-
-      <!-- ADD -->
-      <div class="panel" id="panel-add">
-        <div class="form-wrap">
-          <div class="form-top">
-            <div class="form-top-ico">✏️</div>
-            <div><div class="form-top-title" id="form-ttl">Add New Lender</div><div class="form-top-sub">// Saves to cloud automatically</div></div>
-          </div>
-          <div class="form-body">
-            <div class="fgrid">
-              <div class="fg"><label class="flabel">Code *</label><input class="finput" id="f-code" placeholder="e.g. LF, FF, VOX"></div>
-              <div class="fg"><label class="flabel">Lender Name *</label><input class="finput" id="f-name" placeholder="Full lender name"></div>
-              <div class="fg full"><label class="flabel">TO Emails (comma-separated)</label><input class="finput" id="f-to" placeholder="submissions@lender.com, ops@lender.com"></div>
-              <div class="fg full"><label class="flabel">CC Emails (comma-separated)</label><input class="finput" id="f-cc" placeholder="manager@lender.com"></div>
-              <div class="fg full"><label class="flabel">Notes</label><input class="finput" id="f-notes" placeholder="e.g. docs required, renewal only"></div>
-            </div>
-            <div class="form-footer">
-              <div class="fmsg" id="fmsg"></div>
-              <div style="display:flex;gap:6px"><button class="btn btn-outline" onclick="clearForm()">CLEAR</button><button class="btn btn-green" onclick="saveLender()">SAVE LENDER</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    <div class="footnote">your conversation saves automatically · powered by maxnaveed</div>
   </div>
 </div>
-
-<!-- MODALS -->
-<div class="modal-bg" id="pwd-modal">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-title" id="modal-ttl">Add Password Entry</div><button class="modal-x" onclick="closePwdModal()">✕</button></div>
-    <div class="modal-body">
-      <div class="fg"><label class="flabel">Name / Site *</label><input class="finput" id="pm-name" placeholder="e.g. Headway, Rapidfinance Portal"></div>
-      <div class="fg"><label class="flabel">Username / Email</label><input class="finput" id="pm-user" placeholder="user@email.com"></div>
-      <div class="fg"><label class="flabel">Password</label>
-        <div style="position:relative;display:flex;align-items:center"><input class="finput" id="pm-pwd" type="password" placeholder="••••••••••" style="padding-right:38px"><button onclick="togglePwdVis('pm-pwd',this)" class="ibt" style="position:absolute;right:8px;font-size:13px">👁</button></div>
-      </div>
-      <div class="fg"><label class="flabel">Login URL</label><input class="finput" id="pm-url" placeholder="https://portal.lender.com"></div>
-      <div class="fg"><label class="flabel">Category</label><input class="finput" id="pm-cat" placeholder="e.g. Lender Portal, CRM, Bank"></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closePwdModal()">CANCEL</button><button class="btn btn-green" onclick="savePwd()">SAVE ENTRY</button></div>
-  </div>
-</div>
-
-<div class="modal-bg" id="rr-modal">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-title" id="rr-modal-ttl">Add Agent</div><button class="modal-x" onclick="document.getElementById('rr-modal').classList.remove('open')">✕</button></div>
-    <div class="modal-body">
-      <div class="fg"><label class="flabel">Agent Name *</label><input class="finput" id="rr-agent-name" placeholder="e.g. John Smith"></div>
-      <div class="fg"><label class="flabel">Cap Amount ($)</label><input class="finput" id="rr-agent-cap" placeholder="e.g. 30000" type="number"></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="document.getElementById('rr-modal').classList.remove('open')">CANCEL</button><button class="btn btn-green" onclick="saveRRAgent()">ADD AGENT</button></div>
-  </div>
-</div>
-
-<div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
-// AUTH
-const RESET_EMAIL="maxnaveed007@gmail.com";
-let APP_PASSWORD=localStorage.getItem("lp_password")||"lender2024";
-let _rc="";
-function doLogin(){APP_PASSWORD=localStorage.getItem("lp_password")||"lender2024";const pwd=document.getElementById("lpwd").value;const err=document.getElementById("lerr");if(pwd===APP_PASSWORD){document.getElementById("login-screen").classList.add("hidden");sessionStorage.setItem("lp_auth","1");err.classList.remove("show");loadCloud()}else{err.classList.add("show");document.getElementById("lpwd").value="";document.getElementById("lpwd").focus();const b=document.querySelector(".login-screen .login-card");b.style.animation="none";b.offsetHeight;b.style.animation="shake .4s ease"}}
-function doLogout(){sessionStorage.removeItem("lp_auth");location.reload()}
-function toggleLoginEye(btn){const i=document.getElementById("lpwd");i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈"}
-function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈"}
-function showReset(){document.getElementById("login-screen").classList.add("hidden");document.getElementById("reset-screen").classList.remove("hidden");document.getElementById("rst-s1").style.display="block";document.getElementById("rst-s2").style.display="none";document.getElementById("rst-code").value="";document.getElementById("rst-err1").classList.remove("show")}
-function hideReset(){document.getElementById("reset-screen").classList.add("hidden");document.getElementById("login-screen").classList.remove("hidden")}
-function sendCode(){_rc=Math.floor(100000+Math.random()*900000).toString();localStorage.setItem("lp_rcode",_rc);localStorage.setItem("lp_rexp",Date.now()+15*60*1000);const su=encodeURIComponent("LED Reset Code");const bo=encodeURIComponent("Your reset code:\n\n"+_rc+"\n\nExpires in 15 minutes.");window.open("https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(RESET_EMAIL)+"&su="+su+"&body="+bo,"_blank");toast("Code sent","s")}
-function verifyCode(){const v=document.getElementById("rst-code").value.trim();const s=localStorage.getItem("lp_rcode");const x=parseInt(localStorage.getItem("lp_rexp")||"0");const e=document.getElementById("rst-err1");if(!s||Date.now()>x){e.textContent="// CODE EXPIRED";e.classList.add("show");return}if(v!==s){e.textContent="// INVALID CODE";e.classList.add("show");return}e.classList.remove("show");document.getElementById("rst-s1").style.display="none";document.getElementById("rst-s2").style.display="block"}
-function setNewPwd(){const p1=document.getElementById("np1").value,p2=document.getElementById("np2").value;const e=document.getElementById("rst-err2");if(!p1){e.textContent="// CANNOT BE EMPTY";e.classList.add("show");return}if(p1!==p2){e.textContent="// PASSWORDS DO NOT MATCH";e.classList.add("show");return}localStorage.setItem("lp_password",p1);APP_PASSWORD=p1;localStorage.removeItem("lp_rcode");localStorage.removeItem("lp_rexp");toast("Password updated","s");hideReset();document.getElementById("lpwd").value=""}
-function checkAuth(){if(sessionStorage.getItem("lp_auth")==="1"){document.getElementById("login-screen").classList.add("hidden");loadCloud()}}
+  function goTo(view){
+    document.getElementById('view-landing').style.display = view === 'landing' ? 'block' : 'none';
+    document.getElementById('view-login').style.display = view === 'login' ? 'flex' : 'none';
+    document.getElementById('view-app').style.display = view === 'app' ? 'flex' : 'none';
+    window.scrollTo(0,0);
+    if(view === 'app'){ document.getElementById('composer').focus(); }
+  }
+  function scrollToSection(id){
+    goTo('landing');
+    setTimeout(() => { document.getElementById(id).scrollIntoView({ behavior:'smooth' }); }, 0);
+  }
 
-// CLOUD
-const BIN_ID="6a272d8ef5f4af5e29cdbcd5",API_KEY="$2a$10$4QT4KzwLao5T1VAUExkcuuqZV5C/axkZovd3oZUgz2mlKAbqSQ/iG",BIN_URL="https://api.jsonbin.io/v3/b/"+BIN_ID;
-let db=JSON.parse(localStorage.getItem("lp_db_v4"))||{};
-let pwds=JSON.parse(localStorage.getItem("lp_pwds_v4"))||[];
-let rrData=JSON.parse(localStorage.getItem("lp_rr_v4"))||{owner:{agents:[],turn:0},pricing:{agents:[],turn:0},funding:{agents:[],turn:0}};
-let _st=null;
-async function loadCloud(){setCloud("saving","LOADING");try{const r=await fetch(BIN_URL+"/latest",{headers:{"X-Master-Key":API_KEY}});const j=await r.json();const d=j.record;if(d&&d.lenders&&Object.keys(d.lenders).length){db=d.lenders;pwds=d.passwords||[];if(d.rr)rrData=d.rr;localStorage.setItem("lp_db_v4",JSON.stringify(db));localStorage.setItem("lp_pwds_v4",JSON.stringify(pwds));localStorage.setItem("lp_rr_v4",JSON.stringify(rrData))}setCloud("ok","SYNCED");updateMeta();renderChips()}catch(e){setCloud("err","OFFLINE");toast("Cloud unavailable","e");updateMeta();renderChips()}}
-function saveDB(){localStorage.setItem("lp_db_v4",JSON.stringify(db));schedSave();updateMeta()}
-function savePwds(){localStorage.setItem("lp_pwds_v4",JSON.stringify(pwds));schedSave();updateMeta()}
-function saveRR(){localStorage.setItem("lp_rr_v4",JSON.stringify(rrData));schedSave();toast("Round robin saved","s")}
-function schedSave(){clearTimeout(_st);setCloud("saving","SAVING");_st=setTimeout(async()=>{try{await fetch(BIN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify({lenders:db,passwords:pwds,rr:rrData})});setCloud("ok","SYNCED");flashSaved()}catch(e){setCloud("err","OFFLINE")}},800)}
-function setCloud(s,t){const p=document.getElementById("cloud-pill"),tx=document.getElementById("cloud-txt");if(!p)return;p.className="cloud-pill"+(s==="saving"?" saving":s==="err"?" err":"");tx.textContent=t}
-function flashSaved(){const e=document.getElementById("saved-flash");e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),2000)}
-function updateMeta(){const n=Object.keys(db).length,p=pwds.length;["nav-cnt","sb-cnt","h-lenders"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});["nav-pwd","sb-pwd"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=p})}
+  async function enterApp(){
+    goTo('app');
+    await loadHistory();
+  }
 
-function toast(msg,type=""){const w=document.getElementById("toast-wrap"),t=document.createElement("div");t.className="toast"+(type==="s"?" s":type==="e"?" e":"");t.innerHTML=`<div class="ticon">${type==="s"?"✓":type==="e"?"✗":"//"}</div><span>${msg}</span>`;w.appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add("on")));setTimeout(()=>{t.classList.remove("on");setTimeout(()=>t.remove(),400)},2800)}
-function cp(text,lbl){navigator.clipboard.writeText(text).then(()=>{toast("Copied: "+(lbl||text.slice(0,36)),"s");window.scrollTo({top:0,behavior:"smooth"})})}
+  const chatInner = document.getElementById('chat-inner');
+  const emptyState = document.getElementById('empty-state');
+  const composer = document.getElementById('composer');
+  const sendBtn = document.getElementById('send-btn');
+  const newChatBtn = document.getElementById('new-chat');
+  const chatMain = document.getElementById('chat-main');
 
-const TITLES={search:"// Search",directory:"// Directory",roundrobin:"// Round Robin",vault:"// Vault",add:"// Add Lender"};
-function goNav(id,el){document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));document.querySelectorAll(".nitem").forEach(n=>n.classList.remove("on"));document.getElementById("panel-"+id).classList.add("active");document.getElementById("page-title").textContent=TITLES[id]||id;if(el)el.classList.add("on");if(id==="directory")renderTable();if(id==="vault")renderVault();if(id==="roundrobin")renderRR();if(id==="add")clearForm();window.scrollTo({top:0,behavior:"smooth"})}
+  let history = [];
+  let isStreaming = false;
 
-function renderChips(){document.getElementById("chips").innerHTML=Object.keys(db).sort().map(c=>`<span class="chip" onclick="quickSearch('${c}')">${c}</span>`).join("")}
-function quickSearch(code){document.getElementById("srch").value=code;doSearch()}
+  function scrollToBottom(){ chatMain.scrollTop = chatMain.scrollHeight; }
+  function clearEmptyState(){ if(emptyState && emptyState.parentNode){ emptyState.remove(); } }
 
-// ══ SEARCH - LF LF FIX: renders each occurrence separately ══
-function doSearch(){
-  const raw=document.getElementById("srch").value.trim();
-  const box=document.getElementById("search-results");
-  if(!raw){box.innerHTML="";return}
-  const inputCodes=raw.toUpperCase().split(/[\s,]+/).filter(Boolean);
-  // Count occurrences for dupe detection
-  const freq={};inputCodes.forEach(c=>{freq[c]=(freq[c]||0)+1});
-  const dupes=Object.keys(freq).filter(c=>freq[c]>1);
-  const dupeWarn=dupes.length?`<div class="dupe-warn">⚠ Duplicate: <strong>${dupes.join(", ")}</strong> — showing each occurrence separately</div>`:"";
-  let html="",found=0,allTo=[],allCc=[];
-  // Track per-code occurrence index for unique element IDs
-  const occurrence={};
-  inputCodes.forEach((code,i)=>{
-    const l=db[code];if(!l)return;
-    occurrence[code]=(occurrence[code]||0);
-    const occ=occurrence[code];
-    occurrence[code]++;
-    found++;
-    const toList=l.to?l.to.split(",").map(e=>e.trim()).filter(Boolean):[];
-    const ccList=l.cc?l.cc.split(",").map(e=>e.trim()).filter(Boolean):[];
-    toList.forEach(e=>{if(!allTo.includes(e))allTo.push(e)});
-    ccList.forEach(e=>{if(!allCc.includes(e))allCc.push(e)});
-    // Unique prefix for this occurrence's element IDs
-    const uid=`${code}_${i}`;
-    const makeRows=(list,field)=>{
-      if(!list.length) return `<span style="color:var(--muted);font-size:11px;font-family:var(--mono)">—</span>`;
-      return list.map((e,ei)=>{
-        const safeE=e.replace(/'/g,"\\'").replace(/"/g,"&quot;");
-        return `<div class="email-row" id="er_${uid}_${field}_${ei}">
-          <span class="email-display" onclick="startEdit('${code}','${field}',${ei},'${uid}',this)">${e}</span>
-          <input class="email-edit-inp" value="${safeE}"
-            onblur="saveEdit('${code}','${field}',${ei},this)"
-            onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape')cancelEdit(this)">
-          <div class="row-btns">
-            <button class="rbtn" onclick="cp('${safeE}','${safeE}')">⧉</button>
-            <button class="rbtn del" onclick="delEmail('${code}','${field}',${ei})">✕</button>
-          </div>
-        </div>`}).join("")+
-        `<button class="add-row" onclick="addEmail('${code}','${field}')">+ ADD ${field.toUpperCase()}</button>`;
-    };
-    const ccAll=ccList.length>1?`<button class="esec-copy-all" onclick="cp('${ccList.map(e=>e.replace(/'/g,"\\'")).join(",")}','All CC ${code}')">⧉ All</button>`:"";
-    const toAll=toList.length>1?`<button class="esec-copy-all" onclick="cp('${toList.map(e=>e.replace(/'/g,"\\'")).join(",")}','All TO ${code}')">⧉ All</button>`:"";
-    const gUrl="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(toList.join(","))+"&cc="+encodeURIComponent(ccList.join(","));
-    const dupeBadge=freq[code]>1?`<span style="background:var(--amber-l);color:var(--amber);font-size:10px;padding:2px 6px;border-radius:3px;border:1px solid rgba(240,165,0,.3);font-family:var(--mono)">#${occ+1}</span>`:"";
-    html+=`<div class="rcard" style="animation-delay:${i*.06}s">
-      <div class="rcard-head">
-        <div class="rcard-meta">
-          <span class="code-badge">${code}</span>
-          <span class="rcard-name">${l.name}</span>
-          ${l.notes?`<span class="note-badge">${l.notes}</span>`:""}
-          ${dupeBadge}
-        </div>
-        <div class="rcard-actions">
-          <button class="btn-gmail" onclick="window.open('${gUrl}','_blank')">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.909 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-            GMAIL
-          </button>
-          <button class="btn btn-outline btn-sm" onclick="editLender('${code}')">✏ EDIT</button>
-          <button class="btn btn-xs btn-red" onclick="delLender('${code}')">🗑</button>
-        </div>
-      </div>
-      <div class="rcard-body">
-        <div><div class="esec-label"><span>TO</span><div class="esec-line"></div>${toAll}</div>${makeRows(toList,"to")}</div>
-        <div><div class="esec-label"><span>CC</span><div class="esec-line"></div>${ccAll}</div>${makeRows(ccList,"cc")}</div>
-      </div>
-    </div>`;
+  async function loadHistory(){
+    try{
+      const result = await window.storage.get('chat-history', false);
+      if(result && result.value){
+        const saved = JSON.parse(result.value);
+        if(Array.isArray(saved) && saved.length){
+          history = saved;
+          chatInner.innerHTML = '';
+          saved.forEach(m => addBubble(m.role, m.content));
+        }
+      }
+    }catch(err){
+      // nothing saved yet, or storage unavailable on this host — start fresh
+    }
+  }
+
+  async function saveHistory(){
+    try{
+      await window.storage.set('chat-history', JSON.stringify(history), false);
+    }catch(err){
+      // saving failed silently — chat still works, it just won't persist
+    }
+  }
+
+  function addBubble(role, text){
+    clearEmptyState();
+    const row = document.createElement('div');
+    row.className = 'row ' + role;
+    const wrap = document.createElement('div');
+    const label = document.createElement('span');
+    label.className = 'sender-label';
+    label.textContent = role === 'user' ? 'you' : 'max gpt';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    wrap.appendChild(label);
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    chatInner.appendChild(row);
+    scrollToBottom();
+    return bubble;
+  }
+
+  function addTypingIndicator(){
+    clearEmptyState();
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    row.id = 'typing-row';
+    const wrap = document.createElement('div');
+    const label = document.createElement('span');
+    label.className = 'sender-label';
+    label.textContent = 'max gpt';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = '<span class="typing"><span></span><span></span><span></span></span>';
+    wrap.appendChild(label);
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    chatInner.appendChild(row);
+    scrollToBottom();
+  }
+  function removeTypingIndicator(){
+    const row = document.getElementById('typing-row');
+    if(row) row.remove();
+  }
+  function addErrorBubble(message){
+    clearEmptyState();
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    const wrap = document.createElement('div');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = '<span class="error-text">' + message + '</span>';
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    chatInner.appendChild(row);
+    scrollToBottom();
+  }
+
+  async function sendMessage(){
+    const text = composer.value.trim();
+    if(!text || isStreaming) return;
+    isStreaming = true;
+    sendBtn.disabled = true;
+    composer.value = '';
+    composer.style.height = 'auto';
+    addBubble('user', text);
+    history.push({ role: 'user', content: text });
+    addTypingIndicator();
+    try{
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: 'You are Max GPT, a friendly and capable AI assistant. Be direct, warm, and helpful.',
+          messages: history
+        })
+      });
+      const data = await response.json();
+      removeTypingIndicator();
+      const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+      const replyText = textBlocks.join('\n').trim();
+      if(replyText){
+        addBubble('assistant', replyText);
+        history.push({ role: 'assistant', content: replyText });
+        await saveHistory();
+      } else {
+        addErrorBubble('No response came back. Try sending that again.');
+      }
+    } catch(err){
+      removeTypingIndicator();
+      addErrorBubble('Something went wrong reaching Max GPT. Check your connection and try again.');
+    } finally {
+      isStreaming = false;
+      sendBtn.disabled = false;
+      composer.focus();
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  composer.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
   });
-  if(!found){box.innerHTML=dupeWarn+`<div class="empty"><div class="empty-ico">🔍</div><div class="empty-t">No Lenders Found</div><div style="font-family:var(--mono);font-size:11px">// Searched: ${raw.toUpperCase()}</div></div>`;return}
-  const allE=[...new Set([...allTo,...allCc])];
-  box.innerHTML=dupeWarn+html+`
-    <div class="combined-bar">
-      <div style="display:flex;align-items:center;gap:8px"><span class="cb-tag">${found} RESULT${found>1?"S":""}</span><span style="font-family:var(--mono);font-size:11px;color:var(--text2)">Combined output</span></div>
-      <div class="cb-actions">
-        <button class="btn btn-outline btn-sm" onclick="cp('${allTo.join(",")}','All TO')">⧉ COPY TO</button>
-        <button class="btn btn-outline btn-sm" onclick="cp('${allCc.join(",")}','All CC')">⧉ COPY CC</button>
-        <button class="btn btn-outline btn-sm" onclick="cp('${allE.join(",")}','All emails')">⧉ COPY ALL</button>
-        <button class="btn-gmail" style="padding:7px 14px" onclick="openAllGmail(${JSON.stringify(inputCodes).replace(/"/g,'&quot;')})">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.909 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-          ALL (${found}) GMAIL
-        </button>
-      </div>
-    </div>`;
-}
-
-function openAllGmail(codes){let d=0,o=0;codes.forEach(code=>{const l=db[code];if(!l)return;const to=l.to?l.to.split(",").map(e=>e.trim()).filter(Boolean):[];const cc=l.cc?l.cc.split(",").map(e=>e.trim()).filter(Boolean):[];setTimeout(()=>window.open("https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(to.join(","))+"&cc="+encodeURIComponent(cc.join(",")),"_blank"),d);d+=400;o++});toast("Opened "+o+" Gmail windows","s")}
-
-function startEdit(code,field,idx,uid,span){const row=span.closest(".email-row");const inp=row.querySelector(".email-edit-inp");span.style.display="none";inp.style.display="block";inp.focus();inp.select();row.classList.add("editing")}
-function saveEdit(code,field,idx,inp){const val=inp.value.trim();const row=inp.closest(".email-row");const span=row.querySelector(".email-display");row.classList.remove("editing");if(!val){delEmail(code,field,idx);return}const list=(db[code][field]||"").split(",").map(e=>e.trim()).filter(Boolean);list[idx]=val;db[code][field]=list.join(",");saveDB();span.textContent=val;inp.value=val;span.style.display="";inp.style.display="none";toast("Updated "+code+"."+field,"s");window.scrollTo({top:0,behavior:"smooth"})}
-function cancelEdit(inp){const row=inp.closest(".email-row");const span=row.querySelector(".email-display");row.classList.remove("editing");inp.value=span.textContent;span.style.display="";inp.style.display="none"}
-function delEmail(code,field,idx){const list=(db[code][field]||"").split(",").map(e=>e.trim()).filter(Boolean);list.splice(idx,1);db[code][field]=list.join(",");saveDB();doSearch();toast("Removed email","s")}
-function addEmail(code,field){const val=prompt("Add new "+field.toUpperCase()+" email for "+code+":");if(!val||!val.trim())return;const list=(db[code][field]||"").split(",").map(e=>e.trim()).filter(Boolean);list.push(val.trim());db[code][field]=list.join(",");saveDB();doSearch();toast("Added to "+code,"s")}
-
-// TABLE
-function renderTable(){const keys=Object.keys(db).sort();const allTO=Object.values(db).flatMap(l=>l.to?l.to.split(",").filter(Boolean):[]);const allCC=Object.values(db).flatMap(l=>l.cc?l.cc.split(",").filter(Boolean):[]);document.getElementById("stats-grid").innerHTML=`<div class="stat-card"><div class="stat-v">${keys.length}</div><div class="stat-l">LENDERS</div></div><div class="stat-card"><div class="stat-v">${allTO.length}</div><div class="stat-l">TO ADDRS</div></div><div class="stat-card"><div class="stat-v">${allCC.length}</div><div class="stat-l">CC ADDRS</div></div><div class="stat-card"><div class="stat-v">${allTO.length+allCC.length}</div><div class="stat-l">TOTAL</div></div>`;document.getElementById("tbl-body").innerHTML=keys.map((code,i)=>{const l=db[code];return `<tr><td style="color:var(--muted);font-family:var(--mono);font-size:10px">${i+1}</td><td><input class="code-cell-inp" value="${esc(code)}" onchange="changeCode('${esc(code)}',this.value,this)"></td><td><input class="cell-inp" value="${esc(l.name)}" onchange="cellSave('${code}','name',this.value)"></td><td><input class="cell-inp" value="${esc(l.to)}" onchange="cellSave('${code}','to',this.value)" style="min-width:180px"></td><td><input class="cell-inp" value="${esc(l.cc)}" onchange="cellSave('${code}','cc',this.value)" style="min-width:150px"></td><td><input class="cell-inp" value="${esc(l.notes)}" onchange="cellSave('${code}','notes',this.value)"></td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editLender('${code}')">✏</button><button class="btn btn-xs btn-red" onclick="delLender('${code}')">🗑</button></div></td></tr>`}).join("")}
-function esc(s){return(s||"").replace(/"/g,"&quot;")}
-function cellSave(code,field,val){if(!db[code])return;db[code][field]=val.trim();saveDB();toast(code+" saved","s");window.scrollTo({top:0,behavior:"smooth"})}
-function changeCode(oldCode,newCode,inp){newCode=newCode.trim().toUpperCase();if(!newCode||newCode===oldCode){inp.value=oldCode;return}if(db[newCode]){toast("Code '"+newCode+"' exists","e");inp.value=oldCode;return}db[newCode]=db[oldCode];delete db[oldCode];saveDB();renderTable();renderChips();toast("Renamed: "+oldCode+" → "+newCode,"s")}
-function delLender(code){if(!confirm('Delete "'+code+'"?'))return;delete db[code];saveDB();renderTable();renderChips();toast("Deleted "+code,"e")}
-function editLender(code){const l=db[code];if(!l)return;document.getElementById("f-code").value=code;document.getElementById("f-name").value=l.name;document.getElementById("f-to").value=l.to;document.getElementById("f-cc").value=l.cc;document.getElementById("f-notes").value=l.notes;document.getElementById("form-ttl").textContent="Editing: "+code;goNav("add",null);document.querySelectorAll(".nitem").forEach(n=>n.classList.remove("on"))}
-function saveLender(){const code=document.getElementById("f-code").value.trim().toUpperCase();const name=document.getElementById("f-name").value.trim();const msg=document.getElementById("fmsg");if(!code){msg.textContent="// Code required";msg.style.color="var(--red)";return}if(!name){msg.textContent="// Name required";msg.style.color="var(--red)";return}const isNew=!db[code];db[code]={name,to:document.getElementById("f-to").value.trim(),cc:document.getElementById("f-cc").value.trim(),notes:document.getElementById("f-notes").value.trim()};saveDB();renderChips();toast(isNew?"Added: "+code:"Updated: "+code,"s");msg.textContent=isNew?"// "+code+" added":"// "+code+" updated";msg.style.color="var(--green)";setTimeout(()=>{msg.textContent="";document.getElementById("form-ttl").textContent="Add New Lender"},3000);if(isNew)clearForm()}
-function clearForm(){["f-code","f-name","f-to","f-cc","f-notes"].forEach(id=>document.getElementById(id).value="");document.getElementById("fmsg").textContent="";document.getElementById("form-ttl").textContent="Add New Lender"}
-
-// ROUND ROBIN - ONE TEAM
-const RR_ROLES=[{key:"owner",label:"Owner",cls:"owner"},{key:"pricing",label:"Pricing Manager",cls:"pricing"},{key:"funding",label:"Funding Coordinator",cls:"funding"}];
-let _rrRole="";
-function renderRR(){
-  document.getElementById("rr-roles-grid").innerHTML=RR_ROLES.map(r=>{
-    const data=rrData[r.key];const agents=data.agents||[];const turn=data.turn||0;
-    const rows=agents.map((a,i)=>`
-      <div class="rr-agent${i===turn%agents.length?" active-turn "+r.cls:""}" onclick="setTurn('${r.key}',${i})">
-        <div class="rr-aname">${a.name}</div>
-        <div class="rr-aright">
-          ${a.cap?`<span class="rr-cap">$${Number(a.cap).toLocaleString()}</span>`:""}
-          <div class="rr-dot"></div>
-          <button class="rbtn del" style="font-size:10px" onclick="event.stopPropagation();delRRAgent('${r.key}',${i})">✕</button>
-        </div>
-      </div>`).join("");
-    return `<div class="rr-role-col">
-      <div class="rr-role-title ${r.cls}">${r.label}</div>
-      ${rows||`<div style="text-align:center;padding:12px;color:var(--muted);font-size:11px;font-family:var(--mono)">// No agents</div>`}
-      <button class="rr-add" onclick="openAddAgent('${r.key}')">+ ADD AGENT</button>
-    </div>`}).join("");
-  // Turn info
-  const infoParts=RR_ROLES.map(r=>{const a=rrData[r.key].agents;const t=rrData[r.key].turn;return a.length?`${r.label}: <span>${a[t%a.length].name}</span>`:null}).filter(Boolean);
-  document.getElementById("rr-turn-info").innerHTML=infoParts.length?"Current: "+infoParts.join(" · "):"// No agents assigned";
-}
-function setTurn(role,idx){rrData[role].turn=idx;renderRR()}
-function nextTurn(role){const a=rrData[role].agents;if(!a.length)return;rrData[role].turn=(rrData[role].turn+1)%a.length;renderRR();toast(RR_ROLES.find(r=>r.key===role).label+": "+a[rrData[role].turn].name,"s")}
-function openAddAgent(role){_rrRole=role;document.getElementById("rr-agent-name").value="";document.getElementById("rr-agent-cap").value="";document.getElementById("rr-modal-ttl").textContent="Add Agent — "+RR_ROLES.find(r=>r.key===role).label;document.getElementById("rr-modal").classList.add("open")}
-function saveRRAgent(){const name=document.getElementById("rr-agent-name").value.trim();if(!name){toast("Name required","e");return}const cap=document.getElementById("rr-agent-cap").value.trim();rrData[_rrRole].agents.push({name,cap:cap||""});document.getElementById("rr-modal").classList.remove("open");renderRR();saveRR()}
-function delRRAgent(role,idx){if(!confirm("Remove agent?"))return;rrData[role].agents.splice(idx,1);if(rrData[role].turn>=rrData[role].agents.length)rrData[role].turn=0;renderRR();saveRR()}
-
-// VAULT
-let _eidx=-1;
-function openPwdModal(idx=-1){_eidx=idx;if(idx>=0){const p=pwds[idx];document.getElementById("pm-name").value=p.name||"";document.getElementById("pm-user").value=p.user||"";document.getElementById("pm-pwd").value=p.pwd||"";document.getElementById("pm-url").value=p.url||"";document.getElementById("pm-cat").value=p.cat||"";document.getElementById("modal-ttl").textContent="Edit Entry"}else{["pm-name","pm-user","pm-pwd","pm-url","pm-cat"].forEach(id=>document.getElementById(id).value="");document.getElementById("modal-ttl").textContent="Add Password Entry"}document.getElementById("pwd-modal").classList.add("open")}
-function closePwdModal(){document.getElementById("pwd-modal").classList.remove("open")}
-function savePwd(){const name=document.getElementById("pm-name").value.trim();if(!name){toast("Name required","e");return}const entry={name,user:document.getElementById("pm-user").value.trim(),pwd:document.getElementById("pm-pwd").value,url:document.getElementById("pm-url").value.trim(),cat:document.getElementById("pm-cat").value.trim()};if(_eidx>=0)pwds[_eidx]=entry;else pwds.push(entry);savePwds();renderVault();closePwdModal();toast(_eidx>=0?"Updated: "+name:"Saved: "+name,"s")}
-function delPwd(idx){if(!confirm('Delete "'+pwds[idx].name+'"?'))return;pwds.splice(idx,1);savePwds();renderVault();toast("Deleted","e")}
-function togglePwdVis(id,btn){const i=document.getElementById(id);i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈"}
-function renderVault(){const g=document.getElementById("pwd-grid");if(!pwds.length){g.innerHTML='<div class="empty"><div class="empty-ico">🔒</div><div class="empty-t">Vault Empty</div></div>';return}window._pwds=pwds;g.innerHTML=pwds.map((p,i)=>`<div class="pwd-card"><div class="pwd-card-top"><div class="pwd-name">${p.name}</div>${p.cat?`<span class="pwd-cat">${p.cat}</span>`:""}</div>${p.user?`<div class="pwd-row"><span class="pwd-lbl">USER</span><span class="pwd-val">${p.user}</span><div class="pwd-acts"><button class="ibt" onclick="cp('${p.user.replace(/'/g,"\\'")}','${p.name} user')">⧉</button></div></div>`:""} ${p.pwd?`<div class="pwd-row"><span class="pwd-lbl">PASS</span><span class="pwd-val masked" id="pv${i}">••••••••</span><div class="pwd-acts"><button class="ibt" id="eye${i}" onclick="tvlt(${i})">👁</button><button class="ibt" onclick="cp(window._pwds[${i}].pwd,'${p.name} pwd')">⧉</button></div></div>`:""}${p.url?`<a href="${p.url}" target="_blank" class="pwd-url">🔗 ${p.url}</a>`:""}<div class="pwd-foot"><button class="btn btn-outline btn-sm" onclick="openPwdModal(${i})">✏ EDIT</button><button class="btn btn-sm btn-red" onclick="delPwd(${i})">🗑</button></div></div>`).join("")}
-function tvlt(i){const el=document.getElementById("pv"+i),btn=document.getElementById("eye"+i);if(el.classList.contains("masked")){el.textContent=window._pwds[i].pwd;el.classList.remove("masked");btn.textContent="🙈"}else{el.textContent="••••••••";el.classList.add("masked");btn.textContent="👁"}}
-
-function exportCSV(){const rows=[["Code","Name","TO Emails","CC Emails","Notes"]];Object.entries(db).sort().forEach(([c,l])=>rows.push([c,l.name,l.to,l.cc,l.notes]));const csv=rows.map(r=>r.map(c=>`"${(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");const a=Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:"lenders_"+new Date().toISOString().slice(0,10)+".csv"});a.click();toast("CSV downloaded","s")}
-
-updateMeta();renderChips();checkAuth();
+  composer.addEventListener('input', () => {
+    composer.style.height = 'auto';
+    composer.style.height = Math.min(composer.scrollHeight, 160) + 'px';
+  });
+  newChatBtn.addEventListener('click', async () => {
+    history = [];
+    chatInner.innerHTML = '';
+    chatInner.appendChild(emptyState);
+    composer.value = '';
+    composer.style.height = 'auto';
+    try{ await window.storage.delete('chat-history', false); }catch(err){ /* nothing to delete */ }
+    composer.focus();
+  });
 </script>
+
 </body>
 </html>
